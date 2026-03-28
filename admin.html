@@ -8,22 +8,16 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,'Malgun Gothic',sans-serif;background:#0a0a1a;color:#eee;min-height:100vh;padding-bottom:40px}
-.container{max-width:600px;margin:0 auto;padding:12px}
-
-/* 헤더 */
+.container{max-width:700px;margin:0 auto;padding:12px}
 .header{text-align:center;padding:20px 0 10px}
 .header h1{font-size:22px;color:#fff}
 .header h1 span{color:#ef4444}
 .header .sub{color:#888;font-size:11px;margin-top:4px}
-
-/* 관리자 잠금 */
 .lock-screen{text-align:center;padding:60px 20px}
 .lock-screen h2{color:#888;font-size:18px;margin-bottom:16px}
 .lock-screen input{width:200px;padding:12px;border-radius:10px;border:1px solid #333;background:#1a1a2e;color:#eee;font-size:14px;text-align:center;margin-bottom:12px}
 .lock-screen button{display:block;margin:0 auto;padding:12px 40px;border-radius:10px;border:none;background:#ef4444;color:#fff;font-size:14px;font-weight:700;cursor:pointer}
 .lock-screen .error{color:#ef4444;font-size:12px;margin-top:8px}
-
-/* 카드 */
 .card{background:#12122a;border:1px solid #1e1e3a;border-radius:16px;padding:16px;margin-bottom:12px}
 .card-title{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 .card-title .icon{font-size:18px}
@@ -32,17 +26,16 @@ body{font-family:-apple-system,'Malgun Gothic',sans-serif;background:#0a0a1a;col
 .card-title.collapsible.open::after{transform:rotate(180deg)}
 .collapse-body{max-height:0;overflow:hidden;transition:max-height 0.4s ease}
 .collapse-body.open{max-height:50000px}
-
-/* 대시보드 */
 .dash-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
 .dash-item{background:#1a1a2e;border-radius:10px;padding:14px;text-align:center}
-.dash-num{font-size:24px;font-weight:800;color:#667eea}
+.dash-num{font-size:22px;font-weight:800;color:#667eea}
 .dash-label{font-size:10px;color:#888;margin-top:2px}
 .dash-item.red .dash-num{color:#ef4444}
 .dash-item.green .dash-num{color:#34d399}
 .dash-item.yellow .dash-num{color:#fbbf24}
-
-/* 입력 폼 */
+.dash-item.purple .dash-num{color:#a78bfa}
+.dash-item.blue .dash-num{color:#60a5fa}
+.dash-item.pink .dash-num{color:#f472b6}
 .input-group{margin-bottom:12px}
 .input-group label{display:block;font-size:12px;color:#888;margin-bottom:4px}
 .input-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
@@ -53,22 +46,16 @@ body{font-family:-apple-system,'Malgun Gothic',sans-serif;background:#0a0a1a;col
 .btn-blue{background:#667eea;color:#fff}
 .btn-green{background:#10b981;color:#fff}
 .btn-gray{background:#374151;color:#aaa}
+.btn-purple{background:#7c3aed;color:#fff}
 .btn-sm{padding:6px 12px;font-size:11px}
 .form-actions{display:flex;gap:8px;margin-top:8px}
-
-/* 상태 메시지 */
 .msg{font-size:12px;margin-top:8px;padding:8px;border-radius:8px}
 .msg.success{background:#064e3b;color:#34d399}
 .msg.error{background:#7f1d1d;color:#fca5a5}
-
-/* 유저 목록 */
 .user-item{background:#1a1a2e;border-radius:10px;padding:12px;margin-bottom:8px}
 .user-name{font-size:13px;font-weight:700;color:#a78bfa}
 .user-meta{font-size:11px;color:#888;margin-top:2px}
-.user-numbers{margin-top:8px}
 .user-num-row{background:#0a0a1a;border-radius:6px;padding:8px;margin-bottom:4px;font-size:11px}
-
-/* 볼 */
 .ball{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;margin:1px}
 .ball.b1{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
 .ball.b2{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
@@ -76,26 +63,24 @@ body{font-family:-apple-system,'Malgun Gothic',sans-serif;background:#0a0a1a;col
 .ball.b4{background:linear-gradient(135deg,#888,#555)}
 .ball.b5{background:linear-gradient(135deg,#34d399,#10b981)}
 .ball.bonus{background:linear-gradient(135deg,#c084fc,#a855f7)}
-
-/* 테이블 */
 .data-table{width:100%;font-size:11px;border-collapse:collapse}
 .data-table th{color:#888;padding:8px 4px;border-bottom:1px solid #1e1e3a;text-align:left}
 .data-table td{padding:8px 4px;border-bottom:1px solid #0a0a1a}
-
-/* 검색 */
 .search-box{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#1a1a2e;color:#eee;font-size:13px;margin-bottom:12px}
-
-/* 토스트 */
+.stat-bar{height:20px;border-radius:4px;margin-bottom:4px;display:flex;align-items:center;padding:0 8px;font-size:10px;font-weight:700;color:#fff}
+.stat-row{margin-bottom:8px}
+.stat-label{font-size:11px;color:#888;margin-bottom:2px;display:flex;justify-content:space-between}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 24px;border-radius:10px;font-size:13px;display:none;z-index:9999}
 .toast.show{display:block;animation:fadeInOut 2s ease}
 @keyframes fadeInOut{0%{opacity:0}15%{opacity:1}85%{opacity:1}100%{opacity:0}}
-
 .footer{text-align:center;color:#555;font-size:11px;padding:20px 0}
+.tab-bar{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap}
+.tab-btn{padding:8px 14px;border-radius:8px;border:1px solid #333;background:#1a1a2e;color:#888;font-size:12px;cursor:pointer;font-weight:600}
+.tab-btn.active{background:#667eea;color:#fff;border-color:#667eea}
 </style>
 </head>
 <body>
 
-<!-- ========== 관리자 비밀번호 잠금 화면 ========== -->
 <div id="lockScreen" class="lock-screen">
   <h2>🔒 관리자 전용</h2>
   <div><input type="password" id="adminPw" placeholder="비밀번호 입력" onkeypress="if(event.key==='Enter')checkAdminPw()"></div>
@@ -103,7 +88,6 @@ body{font-family:-apple-system,'Malgun Gothic',sans-serif;background:#0a0a1a;col
   <div id="lockError" class="error"></div>
 </div>
 
-<!-- ========== 관리자 메인 화면 (잠금 해제 후) ========== -->
 <div id="adminMain" style="display:none">
 <div class="container">
 
@@ -112,148 +96,202 @@ body{font-family:-apple-system,'Malgun Gothic',sans-serif;background:#0a0a1a;col
     <div class="sub">AI 로또 분석기 백엔드 관리</div>
   </div>
 
-  <!-- 대시보드 요약 -->
-  <div class="card">
-    <div class="card-title"><span class="icon">📊</span> 전체 현황</div>
-    <div id="dashboard" class="dash-grid"></div>
-    <div style="text-align:center;margin-top:8px">
-      <button class="btn btn-blue btn-sm" onclick="refreshDashboard()">🔄 새로고침</button>
+  <!-- 탭 메뉴 -->
+  <div class="tab-bar">
+    <div class="tab-btn active" onclick="showTab('overview')">📊 전체현황</div>
+    <div class="tab-btn" onclick="showTab('draw')">✏️ 당첨번호</div>
+    <div class="tab-btn" onclick="showTab('winners')">🏆 당첨통계</div>
+    <div class="tab-btn" onclick="showTab('users')">👥 사용자</div>
+    <div class="tab-btn" onclick="showTab('patterns')">🧬 패턴분석</div>
+    <div class="tab-btn" onclick="showTab('numbers')">🔢 번호분석</div>
+    <div class="tab-btn" onclick="showTab('growth')">📈 성장추이</div>
+    <div class="tab-btn" onclick="showTab('backup')">💾 백업</div>
+  </div>
+
+  <!-- ====== 전체 현황 ====== -->
+  <div id="tab-overview">
+    <div class="card">
+      <div class="card-title"><span class="icon">📊</span> 전체 현황</div>
+      <div id="dashboard" class="dash-grid"></div>
+      <div style="text-align:center;margin-top:8px">
+        <button class="btn btn-blue btn-sm" onclick="refreshAll()">🔄 새로고침</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🏆</span> 등수별 당첨 요약</div>
+      <div id="winSummary"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🔥</span> 실시간 하이라이트</div>
+      <div id="highlights"></div>
     </div>
   </div>
 
-  <!-- 당첨번호 입력 -->
-  <div class="card">
-    <div class="card-title"><span class="icon">✏️</span> 당첨번호 입력</div>
-    <div class="input-group">
-      <label>회차 번호</label>
-      <div class="input-row">
-        <input type="number" id="inputRound" class="wide" placeholder="회차">
-        <button class="btn btn-gray btn-sm" onclick="autoFillRound()">자동</button>
+  <!-- ====== 당첨번호 입력 ====== -->
+  <div id="tab-draw" style="display:none">
+    <div class="card">
+      <div class="card-title"><span class="icon">✏️</span> 당첨번호 입력</div>
+      <div class="input-group">
+        <label>회차 번호</label>
+        <div class="input-row">
+          <input type="number" id="inputRound" class="wide" placeholder="회차">
+          <button class="btn btn-gray btn-sm" onclick="autoFillRound()">자동</button>
+        </div>
       </div>
-    </div>
-    <div class="input-group">
-      <label>당첨번호 6개</label>
-      <div class="input-row">
-        <input type="number" id="n1" min="1" max="45" placeholder="1">
-        <input type="number" id="n2" min="1" max="45" placeholder="2">
-        <input type="number" id="n3" min="1" max="45" placeholder="3">
-        <input type="number" id="n4" min="1" max="45" placeholder="4">
-        <input type="number" id="n5" min="1" max="45" placeholder="5">
-        <input type="number" id="n6" min="1" max="45" placeholder="6">
+      <div class="input-group">
+        <label>당첨번호 6개</label>
+        <div class="input-row">
+          <input type="number" id="n1" min="1" max="45" placeholder="1">
+          <input type="number" id="n2" min="1" max="45" placeholder="2">
+          <input type="number" id="n3" min="1" max="45" placeholder="3">
+          <input type="number" id="n4" min="1" max="45" placeholder="4">
+          <input type="number" id="n5" min="1" max="45" placeholder="5">
+          <input type="number" id="n6" min="1" max="45" placeholder="6">
+        </div>
       </div>
-    </div>
-    <div class="input-group">
-      <label>보너스 번호</label>
-      <div class="input-row">
-        <input type="number" id="nBonus" min="1" max="45" placeholder="보너스">
+      <div class="input-group">
+        <label>보너스 번호</label>
+        <div class="input-row">
+          <input type="number" id="nBonus" min="1" max="45" placeholder="보너스">
+        </div>
       </div>
+      <div class="form-actions">
+        <button class="btn btn-red" onclick="saveNewDraw()">💾 당첨번호 저장</button>
+        <button class="btn btn-gray" onclick="resetInput()">초기화</button>
+      </div>
+      <div id="drawMsg"></div>
     </div>
-    <div class="form-actions">
-      <button class="btn btn-red" onclick="saveNewDraw()">💾 당첨번호 저장</button>
-      <button class="btn btn-gray" onclick="resetInput()">초기화</button>
+    <div class="card">
+      <div class="card-title"><span class="icon">🔍</span> 당첨 결과 일괄 체크</div>
+      <p style="color:#888;font-size:11px;margin-bottom:8px">모든 사용자의 저장 번호를 최신 당첨번호와 대조합니다</p>
+      <button class="btn btn-green" onclick="checkAllUsersResults()">🚀 전체 사용자 당첨 체크 실행</button>
+      <div id="checkResultMsg"></div>
     </div>
-    <div id="drawMsg"></div>
-  </div>
-
-  <!-- 당첨 결과 일괄 체크 -->
-  <div class="card">
-    <div class="card-title"><span class="icon">🔍</span> 당첨 결과 일괄 체크</div>
-    <p style="color:#888;font-size:11px;margin-bottom:8px">모든 사용자의 저장 번호를 최신 당첨번호와 대조합니다</p>
-    <button class="btn btn-green" onclick="checkAllUsersResults()">🚀 전체 사용자 당첨 체크 실행</button>
-    <div id="checkResultMsg"></div>
-  </div>
-
-  <!-- 등록된 당첨번호 목록 -->
-  <div class="card">
-    <div class="card-title collapsible open" onclick="toggleSection('drawListBody',this)"><span class="icon">📋</span> 등록된 당첨번호 목록</div>
-    <div id="drawListBody" class="collapse-body open">
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span> 등록된 당첨번호 (최근 20회)</div>
       <div id="drawList"></div>
     </div>
   </div>
 
-  <!-- 전체 사용자 목록 -->
-  <div class="card">
-    <div class="card-title collapsible" onclick="toggleSection('userListBody',this)"><span class="icon">👥</span> 전체 사용자 목록</div>
-    <div id="userListBody" class="collapse-body">
+  <!-- ====== 당첨 통계 ====== -->
+  <div id="tab-winners" style="display:none">
+    <div class="card">
+      <div class="card-title"><span class="icon">🏆</span> 등수별 당첨 상세 통계</div>
+      <div id="winnerStats"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span> 당첨자 목록</div>
+      <div id="winnerList"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📊</span> 등급별 적중률</div>
+      <div id="gradeHitRate"></div>
+    </div>
+  </div>
+
+  <!-- ====== 사용자 관리 ====== -->
+  <div id="tab-users" style="display:none">
+    <div class="card">
+      <div class="card-title"><span class="icon">👥</span> 사용자 통계</div>
+      <div id="userStats"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📋</span> 전체 사용자 목록</div>
       <input class="search-box" id="userSearch" placeholder="이름 또는 이메일 검색..." oninput="filterUsers()">
       <div id="userList"></div>
     </div>
-  </div>
-
-  <!-- 사용자별 저장 번호 상세 -->
-  <div class="card">
-    <div class="card-title collapsible" onclick="toggleSection('userDetailBody',this)"><span class="icon">🔎</span> 사용자별 저장 번호 상세</div>
-    <div id="userDetailBody" class="collapse-body">
-      <p style="color:#888;font-size:11px;margin-bottom:8px">위 사용자 목록에서 '상세보기'를 클릭하세요</p>
-      <div id="userDetail"></div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🔎</span> 사용자 상세</div>
+      <div id="userDetail"><p style="color:#666;font-size:12px;text-align:center;padding:12px">위 목록에서 '상세보기'를 클릭하세요</p></div>
     </div>
   </div>
 
-  <!-- 전체 통계 -->
-  <div class="card">
-    <div class="card-title collapsible" onclick="toggleSection('statsBody',this)"><span class="icon">📈</span> 전체 통계</div>
-    <div id="statsBody" class="collapse-body">
-      <div id="globalStats"></div>
+  <!-- ====== 패턴 분석 ====== -->
+  <div id="tab-patterns" style="display:none">
+    <div class="card">
+      <div class="card-title"><span class="icon">🧬</span> 사용자 등급 선호도</div>
+      <div id="gradePreference"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🤖</span> AI vs 수동 선택 비율</div>
+      <div id="aiVsManual"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📊</span> 인기 패턴 TOP 10</div>
+      <div id="popularPatterns"></div>
     </div>
   </div>
 
-  <!-- 데이터 백업 -->
-  <div class="card">
-    <div class="card-title collapsible" onclick="toggleSection('backupBody',this)"><span class="icon">💾</span> 데이터 백업</div>
-    <div id="backupBody" class="collapse-body">
-      <p style="color:#888;font-size:11px;margin-bottom:8px">전체 데이터를 JSON 파일로 다운로드합니다</p>
-      <div class="form-actions">
+  <!-- ====== 번호 분석 ====== -->
+  <div id="tab-numbers" style="display:none">
+    <div class="card">
+      <div class="card-title"><span class="icon">🔥</span> 사용자 인기 번호 TOP 15</div>
+      <div id="popularNumbers"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">❄️</span> 사용자 비인기 번호 TOP 15</div>
+      <div id="unpopularNumbers"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">👥</span> 동일 번호 조합 중복</div>
+      <div id="duplicateNumbers"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📅</span> 회차별 저장 건수</div>
+      <div id="savesByRound"></div>
+    </div>
+  </div>
+
+  <!-- ====== 성장 추이 ====== -->
+  <div id="tab-growth" style="display:none">
+    <div class="card">
+      <div class="card-title"><span class="icon">📈</span> 서비스 성장 지표</div>
+      <div id="growthStats"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">🕐</span> 시간대별 저장 패턴</div>
+      <div id="hourlyPattern"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📅</span> 요일별 사용량</div>
+      <div id="weekdayPattern"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">📊</span> 가입 경로별 통계</div>
+      <div id="providerStats"></div>
+    </div>
+  </div>
+
+  <!-- ====== 백업 ====== -->
+  <div id="tab-backup" style="display:none">
+    <div class="card">
+      <div class="card-title"><span class="icon">💾</span> 데이터 백업</div>
+      <p style="color:#888;font-size:11px;margin-bottom:12px">전체 데이터를 JSON 파일로 다운로드합니다</p>
+      <div class="form-actions" style="flex-wrap:wrap">
         <button class="btn btn-blue" onclick="backupDraws()">📥 당첨번호 백업</button>
         <button class="btn btn-green" onclick="backupUsers()">📥 사용자 데이터 백업</button>
+        <button class="btn btn-purple" onclick="backupAll()">📥 전체 백업</button>
       </div>
     </div>
   </div>
 
-  <div class="footer">AI 로또 분석기 관리자 v5.0</div>
+  <div class="footer">AI 로또 분석기 관리자 v6.0</div>
 </div>
 </div>
 
 <div id="toast" class="toast"></div>
 
-<!-- Firebase -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey:"AIzaSyBdLvfI1ItgRLtGs1qFLBMjZIn3tPaI3Nw",
-  authDomain:"lottl-jihoon.firebaseapp.com",
-  projectId:"lottl-jihoon",
-  storageBucket:"lottl-jihoon.firebasestorage.app",
-  messagingSenderId:"814020270032",
-  appId:"1:814020270032:web:e4895c727d7d1e00ed0bd5"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-window.fireDB = db;
-window.fireCollection = collection;
-window.fireDoc = doc;
-window.fireSetDoc = setDoc;
-window.fireGetDocs = getDocs;
-window.fireDeleteDoc = deleteDoc;
-window.fireGetDoc = getDoc;
-window.firebaseReady = true;
-window.dispatchEvent(new Event('firebaseReady'));
-</script>
-
 <script>
 // ============ 전역 변수 ============
-let allData = [];
-let allUsers = [];
-let allUserNumbers = {}; // {uid: [numbers]}
-const ADMIN_PASSWORD = '1214'; // ⭐ 여기에 원하는 비밀번호를 넣으세요!
+var allData = [];
+var allUsers = [];
+var allUserNumbers = {};
+var ADMIN_PASSWORD = '1214'; // ⭐ 비밀번호 변경하세요!
+var firebaseLoaded = false;
 
-// ============ 관리자 비밀번호 확인 ============
+// ============ 관리자 비밀번호 ============
 function checkAdminPw(){
-  let pw = document.getElementById('adminPw').value;
-  if(pw === ADMIN_PASSWORD){
+  if(document.getElementById('adminPw').value === ADMIN_PASSWORD){
     document.getElementById('lockScreen').style.display='none';
     document.getElementById('adminMain').style.display='block';
     initAdmin();
@@ -262,466 +300,741 @@ function checkAdminPw(){
   }
 }
 
+// ============ 탭 전환 ============
+function showTab(name){
+  var tabs=['overview','draw','winners','users','patterns','numbers','growth','backup'];
+  for(var i=0;i<tabs.length;i++){
+    document.getElementById('tab-'+tabs[i]).style.display = (tabs[i]===name)?'block':'none';
+  }
+  var btns=document.querySelectorAll('.tab-btn');
+  for(var i=0;i<btns.length;i++){btns[i].classList.remove('active');}
+  event.target.classList.add('active');
+}
+
 // ============ 초기화 ============
 function initAdmin(){
   initData();
-  if(window.firebaseReady){
-    loadAllFromFirebase();
-  } else {
-    window.addEventListener('firebaseReady', ()=>{ loadAllFromFirebase(); });
-  }
+  loadFirebase();
 }
 
 function initData(){
-  allData = [];
-  if(typeof LOTTO_DATA !== 'undefined' && Array.isArray(LOTTO_DATA)){
-    for(var i=0; i<LOTTO_DATA.length; i++){
-      var row = LOTTO_DATA[i];
-      allData.push({
-        round: row[0],
-        numbers: [row[1], row[2], row[3], row[4], row[5], row[6]],
-        bonus: row[7]
-      });
+  allData=[];
+  if(typeof LOTTO_DATA!=='undefined' && Array.isArray(LOTTO_DATA)){
+    for(var i=0;i<LOTTO_DATA.length;i++){
+      var row=LOTTO_DATA[i];
+      allData.push({round:row[0],numbers:[row[1],row[2],row[3],row[4],row[5],row[6]],bonus:row[7]});
     }
   }
-  let extra = JSON.parse(localStorage.getItem('extraDraws')||'[]');
-  extra.forEach(e=>{
-    if(!allData.find(d=>d.round===e.round)) allData.push(e);
-  });
-  allData.sort((a,b)=>a.round-b.round);
+  var extra=[];
+  try{extra=JSON.parse(localStorage.getItem('extraDraws')||'[]');}catch(e){}
+  for(var i=0;i<extra.length;i++){
+    var found=false;
+    for(var j=0;j<allData.length;j++){if(allData[j].round===extra[i].round){found=true;break;}}
+    if(!found) allData.push(extra[i]);
+  }
+  allData.sort(function(a,b){return a.round-b.round;});
 }
 
-// ============ Firebase 전체 로드 ============
+// ============ Firebase ============
+async function loadFirebase(){
+  try{
+    var appMod=await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js");
+    var fsMod=await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js");
+    var app=appMod.initializeApp({apiKey:"AIzaSyBdLvfI1ItgRLtGs1qFLBMjZIn3tPaI3Nw",authDomain:"lottl-jihoon.firebaseapp.com",projectId:"lottl-jihoon",storageBucket:"lottl-jihoon.firebasestorage.app",messagingSenderId:"814020270032",appId:"1:814020270032:web:e4895c727d7d1e00ed0bd5"});
+    var db=fsMod.getFirestore(app);
+    window.fb={db:db,collection:fsMod.collection,doc:fsMod.doc,setDoc:fsMod.setDoc,getDocs:fsMod.getDocs,deleteDoc:fsMod.deleteDoc};
+    firebaseLoaded=true;
+    await loadAllFromFirebase();
+  }catch(e){
+    console.log('Firebase 실패:',e.message);
+    showToast('오프라인 모드');
+    refreshAll();
+  }
+}
+
 async function loadAllFromFirebase(){
-  try {
-    // 당첨번호 로드
-    let drawSnap = await window.fireGetDocs(window.fireCollection(window.fireDB,'draws'));
-    drawSnap.forEach(docSnap=>{
-      let d = docSnap.data();
-      if(!allData.find(x=>x.round===d.round)) allData.push(d);
+  try{
+    // 당첨번호
+    var drawSnap=await window.fb.getDocs(window.fb.collection(window.fb.db,'draws'));
+    drawSnap.forEach(function(ds){
+      var d=ds.data();
+      var found=false;
+      for(var i=0;i<allData.length;i++){if(allData[i].round===d.round){found=true;break;}}
+      if(!found) allData.push(d);
     });
-    allData.sort((a,b)=>a.round-b.round);
+    allData.sort(function(a,b){return a.round-b.round;});
 
-    // 사용자 목록 로드
-    let userSnap = await window.fireGetDocs(window.fireCollection(window.fireDB,'users'));
-    allUsers = [];
-    userSnap.forEach(docSnap=>{
-      allUsers.push({uid: docSnap.id, ...docSnap.data()});
-    });
+    // 사용자
+    var userSnap=await window.fb.getDocs(window.fb.collection(window.fb.db,'users'));
+    allUsers=[];
+    userSnap.forEach(function(ds){allUsers.push({uid:ds.id,...ds.data()});});
 
-    // 각 사용자의 저장 번호 로드
-    allUserNumbers = {};
-    for(let user of allUsers){
-      try {
-        let numSnap = await window.fireGetDocs(window.fireCollection(window.fireDB,'users',user.uid,'numbers'));
-        let nums = [];
-        numSnap.forEach(docSnap=>{ nums.push(docSnap.data()); });
-        nums.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
-        allUserNumbers[user.uid] = nums;
-      } catch(e){
-        allUserNumbers[user.uid] = [];
-      }
+    // 각 사용자 번호
+    allUserNumbers={};
+    for(var u=0;u<allUsers.length;u++){
+      try{
+        var numSnap=await window.fb.getDocs(window.fb.collection(window.fb.db,'users',allUsers[u].uid,'numbers'));
+        var nums=[];
+        numSnap.forEach(function(ds){nums.push(ds.data());});
+        nums.sort(function(a,b){return(b.timestamp||0)-(a.timestamp||0);});
+        allUserNumbers[allUsers[u].uid]=nums;
+      }catch(e){allUserNumbers[allUsers[u].uid]=[];}
     }
 
-    refreshAdminAll();
-    showToast('데이터 로드 완료');
-  } catch(e){
-    showToast('데이터 로드 실패: '+e.message);
+    refreshAll();
+    showToast('데이터 로드 완료!');
+  }catch(e){
+    console.log('로드 실패:',e.message);
+    refreshAll();
   }
 }
 
-// ============ 대시보드 ============
-function refreshDashboard(){
-  loadAllFromFirebase();
+// ============ 볼 HTML ============
+function getBallClass(n){if(n<=10)return'b1';if(n<=20)return'b2';if(n<=30)return'b3';if(n<=40)return'b4';return'b5';}
+function ballHTML(n,extra){return'<span class="ball '+getBallClass(n)+(extra?' '+extra:'')+'">' +n+'</span>';}
+
+// ============ 모든 저장 번호를 flat 배열로 ============
+function getAllNumbers(){
+  var all=[];
+  for(var uid in allUserNumbers){
+    var nums=allUserNumbers[uid];
+    for(var i=0;i<nums.length;i++){
+      all.push({uid:uid,entry:nums[i]});
+    }
+  }
+  return all;
 }
 
+// ============ 당첨 매칭 함수 ============
+function getMatchInfo(myNums, drawNums, bonus){
+  var matched=[];
+  for(var k=0;k<myNums.length;k++){
+    for(var l=0;l<drawNums.length;l++){
+      if(myNums[k]===drawNums[l]){matched.push(myNums[k]);break;}
+    }
+  }
+  var bonusMatch=false;
+  for(var k=0;k<myNums.length;k++){if(myNums[k]===bonus){bonusMatch=true;break;}}
+  var mc=matched.length;
+  var prize=0;
+  if(mc===6) prize=1;
+  else if(mc===5 && bonusMatch) prize=2;
+  else if(mc===5) prize=3;
+  else if(mc===4) prize=4;
+  else if(mc===3) prize=5;
+  return {matchCount:mc, matched:matched, bonusMatch:bonusMatch, prize:prize};
+}
+
+// ============ 전체 현황 대시보드 ============
 function showDashboard(){
-  let totalUsers = allUsers.length;
-  let totalNumbers = 0;
-  let totalMatch3=0, totalMatch4=0, totalMatch5=0, totalMatch6=0;
+  var totalUsers=allUsers.length;
+  var allNums=getAllNumbers();
+  var totalNumbers=allNums.length;
+  var w1=0,w2=0,w3=0,w4=0,w5=0;
+  for(var i=0;i<allNums.length;i++){
+    var r=allNums[i].entry.result;
+    if(!r) continue;
+    if(r.prize===1)w1++;
+    else if(r.prize===2)w2++;
+    else if(r.prize===3||r.matchCount===5)w3++;
+    else if(r.prize===4||r.matchCount===4)w4++;
+    else if(r.prize===5||r.matchCount===3)w5++;
+  }
+  var totalWins=w1+w2+w3+w4+w5;
+  document.getElementById('dashboard').innerHTML=
+    '<div class="dash-item"><div class="dash-num">'+totalUsers+'</div><div class="dash-label">총 사용자</div></div>'+
+    '<div class="dash-item"><div class="dash-num">'+totalNumbers+'</div><div class="dash-label">총 저장 번호</div></div>'+
+    '<div class="dash-item"><div class="dash-num">'+allData.length+'</div><div class="dash-label">등록 회차</div></div>'+
+    '<div class="dash-item green"><div class="dash-num">'+totalWins+'</div><div class="dash-label">5등 이상 총 당첨</div></div>'+
+    '<div class="dash-item yellow"><div class="dash-num">'+(w1+w2+w3+w4)+'</div><div class="dash-label">4등 이상</div></div>'+
+    '<div class="dash-item red"><div class="dash-num">'+w1+'</div><div class="dash-label">1등</div></div>';
+}
 
-  Object.values(allUserNumbers).forEach(nums=>{
-    totalNumbers += nums.length;
-    nums.forEach(n=>{
-      if(n.result){
-        if(n.result.matchCount===3) totalMatch3++;
-        if(n.result.matchCount===4) totalMatch4++;
-        if(n.result.matchCount===5) totalMatch5++;
-        if(n.result.matchCount>=6) totalMatch6++;
-      }
-    });
-  });
+// ============ 당첨 요약 ============
+function showWinSummary(){
+  var allNums=getAllNumbers();
+  var w={1:0,2:0,3:0,4:0,5:0};
+  for(var i=0;i<allNums.length;i++){
+    var r=allNums[i].entry.result;
+    if(!r) continue;
+    var p=r.prize||(r.matchCount>=6?1:r.matchCount===5?3:r.matchCount===4?4:r.matchCount===3?5:0);
+    if(p>=1&&p<=5) w[p]++;
+  }
+  var total=allNums.length||1;
+  var colors={1:'#ef4444',2:'#f472b6',3:'#a78bfa',4:'#60a5fa',5:'#34d399'};
+  var labels={1:'🏆 1등 (6개 일치)',2:'🥈 2등 (5개+보너스)',3:'🥉 3등 (5개 일치)',4:'🎯 4등 (4개 일치)',5:'✅ 5등 (3개 일치)'};
+  var html='';
+  for(var p=1;p<=5;p++){
+    var pct=((w[p]/total)*100).toFixed(2);
+    var barW=Math.max(w[p]/(w[5]||1)*100,2);
+    html+='<div class="stat-row"><div class="stat-label"><span>'+labels[p]+'</span><span>'+w[p]+'명 ('+pct+'%)</span></div><div class="stat-bar" style="width:'+barW+'%;background:'+colors[p]+'">'+w[p]+'</div></div>';
+  }
+  document.getElementById('winSummary').innerHTML=html;
+}
 
-  let totalWins = totalMatch3+totalMatch4+totalMatch5+totalMatch6;
-
-  document.getElementById('dashboard').innerHTML = `
-    <div class="dash-item"><div class="dash-num">${totalUsers}</div><div class="dash-label">총 사용자</div></div>
-    <div class="dash-item"><div class="dash-num">${totalNumbers}</div><div class="dash-label">총 저장 번호</div></div>
-    <div class="dash-item"><div class="dash-num">${allData.length}</div><div class="dash-label">등록 회차</div></div>
-    <div class="dash-item green"><div class="dash-num">${totalWins}</div><div class="dash-label">5등 이상 총 당첨</div></div>
-    <div class="dash-item yellow"><div class="dash-num">${totalMatch4+totalMatch5+totalMatch6}</div><div class="dash-label">4등 이상</div></div>
-    <div class="dash-item red"><div class="dash-num">${totalMatch6}</div><div class="dash-label">1등</div></div>
-  `;
+// ============ 하이라이트 ============
+function showHighlights(){
+  var allNums=getAllNumbers();
+  var html='';
+  // 최근 당첨자
+  var winners=[];
+  for(var i=0;i<allNums.length;i++){
+    if(allNums[i].entry.result && allNums[i].entry.result.matchCount>=3){
+      winners.push(allNums[i]);
+    }
+  }
+  winners.sort(function(a,b){return(b.entry.result.checkedAt||'')>(a.entry.result.checkedAt||'')?1:-1;});
+  if(winners.length>0){
+    html+='<div style="font-size:12px;color:#888;margin-bottom:6px">최근 당첨자 (최신 5건)</div>';
+    for(var i=0;i<Math.min(5,winners.length);i++){
+      var w=winners[i];
+      var user=null;
+      for(var j=0;j<allUsers.length;j++){if(allUsers[j].uid===w.uid){user=allUsers[j];break;}}
+      var mc=w.entry.result.matchCount;
+      var label=mc>=6?'🏆1등':mc===5?'🎉3등':mc===4?'🎊4등':'✅5등';
+      html+='<div style="background:#1a1a2e;border-radius:8px;padding:8px;margin-bottom:4px;font-size:11px">'+label+' '+(user?(user.name||user.email||'익명'):'익명')+' · '+w.entry.date+' · ['+w.entry.numbers.join(',')+']</div>';
+    }
+  } else {
+    html+='<p style="color:#666;font-size:12px;text-align:center;padding:12px">아직 당첨자가 없습니다</p>';
+  }
+  document.getElementById('highlights').innerHTML=html;
 }
 
 // ============ 당첨번호 입력 ============
 function autoFillRound(){
-  if(allData.length>0){
-    document.getElementById('inputRound').value = allData[allData.length-1].round + 1;
-  }
+  if(allData.length>0) document.getElementById('inputRound').value=allData[allData.length-1].round+1;
 }
 
 function saveNewDraw(){
-  let round = parseInt(document.getElementById('inputRound').value);
-  let nums = [];
-  for(let i=1;i<=6;i++){
-    let v = parseInt(document.getElementById('n'+i).value);
-    if(isNaN(v)||v<1||v>45){
-      showMsg('drawMsg','error','번호를 1~45 사이로 입력하세요');
-      return;
-    }
-    if(nums.includes(v)){
-      showMsg('drawMsg','error','중복 번호가 있습니다');
-      return;
-    }
+  var round=parseInt(document.getElementById('inputRound').value);
+  var nums=[];
+  for(var i=1;i<=6;i++){
+    var v=parseInt(document.getElementById('n'+i).value);
+    if(isNaN(v)||v<1||v>45){showMsg('drawMsg','error','번호를 1~45 사이로 입력하세요');return;}
+    for(var j=0;j<nums.length;j++){if(nums[j]===v){showMsg('drawMsg','error','중복 번호가 있습니다');return;}}
     nums.push(v);
   }
-  let bonus = parseInt(document.getElementById('nBonus').value);
-  if(isNaN(bonus)||bonus<1||bonus>45){
-    showMsg('drawMsg','error','보너스 번호를 입력하세요');
-    return;
-  }
-  if(isNaN(round)||round<1){
-    showMsg('drawMsg','error','회차를 입력하세요');
-    return;
-  }
-  if(allData.find(d=>d.round===round)){
-    showMsg('drawMsg','error',round+'회차는 이미 등록되어 있습니다');
-    return;
-  }
+  var bonus=parseInt(document.getElementById('nBonus').value);
+  if(isNaN(bonus)||bonus<1||bonus>45){showMsg('drawMsg','error','보너스 번호를 입력하세요');return;}
+  if(isNaN(round)||round<1){showMsg('drawMsg','error','회차를 입력하세요');return;}
+  for(var i=0;i<allData.length;i++){if(allData[i].round===round){showMsg('drawMsg','error',round+'회차는 이미 등록되어 있습니다');return;}}
 
-  let newDraw = {
-    round,
-    numbers: nums.sort((a,b)=>a-b),
-    bonus,
-    addedAt: new Date().toISOString()
-  };
-
-  // 로컬 저장
+  var newDraw={round:round,numbers:nums.sort(function(a,b){return a-b;}),bonus:bonus,addedAt:new Date().toISOString()};
   allData.push(newDraw);
-  allData.sort((a,b)=>a.round-b.round);
-  let extra = JSON.parse(localStorage.getItem('extraDraws')||'[]');
+  allData.sort(function(a,b){return a.round-b.round;});
+  var extra=[];try{extra=JSON.parse(localStorage.getItem('extraDraws')||'[]');}catch(e){}
   extra.push(newDraw);
-  localStorage.setItem('extraDraws', JSON.stringify(extra));
-
-  // Firebase 저장
-  if(window.firebaseReady){
-    window.fireSetDoc(window.fireDoc(window.fireDB,'draws',String(round)), newDraw);
-  }
-
-  showMsg('drawMsg','success',round+'회 당첨번호가 저장되었습니다! ['+nums.join(', ')+'] + 보너스 '+bonus);
-  resetInput();
-  showDrawList();
-  showDashboard();
-  autoFillRound();
+  localStorage.setItem('extraDraws',JSON.stringify(extra));
+  if(firebaseLoaded) window.fb.setDoc(window.fb.doc(window.fb.db,'draws',String(round)),newDraw);
+  showMsg('drawMsg','success',round+'회 당첨번호 저장 완료! ['+nums.join(', ')+'] + 보너스 '+bonus);
+  resetInput();showDrawList();showDashboard();autoFillRound();
 }
 
 function resetInput(){
   document.getElementById('inputRound').value='';
-  for(let i=1;i<=6;i++) document.getElementById('n'+i).value='';
+  for(var i=1;i<=6;i++)document.getElementById('n'+i).value='';
   document.getElementById('nBonus').value='';
   autoFillRound();
 }
 
-function showMsg(id, type, text){
-  document.getElementById(id).innerHTML = `<div class="msg ${type}">${text}</div>`;
-  setTimeout(()=>{ document.getElementById(id).innerHTML=''; }, 5000);
+function showMsg(id,type,text){
+  document.getElementById(id).innerHTML='<div class="msg '+type+'">'+text+'</div>';
+  setTimeout(function(){document.getElementById(id).innerHTML='';},5000);
 }
 
-// ============ 당첨번호 목록 ============
 function showDrawList(){
-  let el = document.getElementById('drawList');
-  let recent = allData.slice(-20).reverse();
-  let html = '<table class="data-table"><tr><th>회차</th><th>당첨번호</th><th>보너스</th><th>삭제</th></tr>';
-  recent.forEach(d=>{
-    let nums = d.numbers.slice().sort((a,b)=>a-b);
-    html+=`<tr>
-      <td>${d.round}</td>
-      <td>${nums.map(n=>ballHTML(n)).join('')}</td>
-      <td>${d.bonus?ballHTML(d.bonus,'bonus'):'-'}</td>
-      <td><button class="btn btn-red btn-sm" onclick="deleteDraw(${d.round})">삭제</button></td>
-    </tr>`;
-  });
+  var recent=allData.slice(-20).reverse();
+  var html='<table class="data-table"><tr><th>회차</th><th>당첨번호</th><th>보너스</th><th>삭제</th></tr>';
+  for(var i=0;i<recent.length;i++){
+    var d=recent[i];
+    var nums=d.numbers.slice().sort(function(a,b){return a-b;});
+    var ballsStr='';for(var b=0;b<nums.length;b++){ballsStr+=ballHTML(nums[b]);}
+    html+='<tr><td>'+d.round+'</td><td>'+ballsStr+'</td><td>'+(d.bonus?ballHTML(d.bonus,'bonus'):'-')+'</td><td><button class="btn btn-red btn-sm" onclick="deleteDraw('+d.round+')">삭제</button></td></tr>';
+  }
   html+='</table>';
-  if(allData.length>20) html+=`<div style="text-align:center;color:#888;font-size:11px;margin-top:8px">최근 20회만 표시 (총 ${allData.length}회)</div>`;
-  el.innerHTML = html;
+  document.getElementById('drawList').innerHTML=html;
 }
 
 async function deleteDraw(round){
-  if(!confirm(round+'회 당첨번호를 삭제할까요?')) return;
-  allData = allData.filter(d=>d.round!==round);
-  let extra = JSON.parse(localStorage.getItem('extraDraws')||'[]');
-  extra = extra.filter(d=>d.round!==round);
-  localStorage.setItem('extraDraws', JSON.stringify(extra));
-  if(window.firebaseReady){
-    await window.fireDeleteDoc(window.fireDoc(window.fireDB,'draws',String(round)));
-  }
-  showDrawList();
-  showDashboard();
-  showToast(round+'회 삭제됨');
+  if(!confirm(round+'회 삭제할까요?'))return;
+  var newArr=[];for(var i=0;i<allData.length;i++){if(allData[i].round!==round)newArr.push(allData[i]);}
+  allData=newArr;
+  var extra=[];try{extra=JSON.parse(localStorage.getItem('extraDraws')||'[]');}catch(e){}
+  var newExtra=[];for(var i=0;i<extra.length;i++){if(extra[i].round!==round)newExtra.push(extra[i]);}
+  localStorage.setItem('extraDraws',JSON.stringify(newExtra));
+  if(firebaseLoaded) await window.fb.deleteDoc(window.fb.doc(window.fb.db,'draws',String(round)));
+  showDrawList();showDashboard();showToast(round+'회 삭제됨');
 }
 
 // ============ 전체 사용자 당첨 체크 ============
 async function checkAllUsersResults(){
-  if(allData.length===0){
-    showMsg('checkResultMsg','error','등록된 당첨번호가 없습니다');
-    return;
-  }
-  let totalChecked=0, totalWins=0;
-
-  for(let user of allUsers){
-    let nums = allUserNumbers[user.uid] || [];
-    for(let entry of nums){
-      if(entry.result) continue; // 이미 체크됨
-      let target = entry.targetRound;
-      let draw = allData.find(d=>d.round===target);
+  if(allData.length===0){showMsg('checkResultMsg','error','등록된 당첨번호가 없습니다');return;}
+  var totalChecked=0,totalWins=0;
+  for(var u=0;u<allUsers.length;u++){
+    var uid=allUsers[u].uid;
+    var nums=allUserNumbers[uid]||[];
+    for(var i=0;i<nums.length;i++){
+      var entry=nums[i];
+      if(entry.result) continue;
+      var target=entry.targetRound;
+      var draw=null;
+      for(var j=0;j<allData.length;j++){if(allData[j].round===target){draw=allData[j];break;}}
       if(!draw) continue;
-
-      let myNums = entry.numbers.slice().sort((a,b)=>a-b);
-      let drawNums = draw.numbers.slice().sort((a,b)=>a-b);
-      let matched = myNums.filter(n=>drawNums.includes(n));
       totalChecked++;
-
-      if(matched.length>=3){
-        entry.result = {
-          round: draw.round,
-          matchCount: matched.length,
-          matchedNumbers: matched,
-          checkedAt: new Date().toISOString()
-        };
+      var info=getMatchInfo(entry.numbers, draw.numbers, draw.bonus);
+      if(info.matchCount>=3){
+        entry.result={round:draw.round,matchCount:info.matchCount,matchedNumbers:info.matched,bonusMatch:info.bonusMatch,prize:info.prize,checkedAt:new Date().toISOString()};
         totalWins++;
-        // Firebase 업데이트
-        if(window.firebaseReady){
-          await window.fireSetDoc(
-            window.fireDoc(window.fireDB,'users',user.uid,'numbers',entry.id),
-            entry,
-            {merge:true}
-          );
+        if(firebaseLoaded){
+          await window.fb.setDoc(window.fb.doc(window.fb.db,'users',uid,'numbers',entry.id),entry,{merge:true});
         }
       }
     }
   }
-
-  showMsg('checkResultMsg','success',`체크 완료! ${totalChecked}건 확인, ${totalWins}건 5등 이상 당첨`);
-  showDashboard();
-  showGlobalStats();
+  showMsg('checkResultMsg','success','체크 완료! '+totalChecked+'건 확인, '+totalWins+'건 5등 이상 당첨');
+  refreshAll();
 }
 
-// ============ 사용자 목록 ============
-function showUserList(){
-  let el = document.getElementById('userList');
-  if(allUsers.length===0){
-    el.innerHTML='<p style="color:#666;font-size:12px;padding:16px;text-align:center">등록된 사용자 없음</p>';
-    return;
+// ============ 당첨 통계 상세 ============
+function showWinnerStats(){
+  var allNums=getAllNumbers();
+  var w={1:[],2:[],3:[],4:[],5:[]};
+  for(var i=0;i<allNums.length;i++){
+    var r=allNums[i].entry.result;
+    if(!r) continue;
+    var p=r.prize||(r.matchCount>=6?1:r.matchCount===5?3:r.matchCount===4?4:r.matchCount===3?5:0);
+    if(p>=1&&p<=5) w[p].push(allNums[i]);
   }
-  let html='';
-  allUsers.forEach(user=>{
-    let nums = allUserNumbers[user.uid] || [];
-    let winCount = nums.filter(n=>n.result && n.result.matchCount>=3).length;
-    html+=`<div class="user-item">
-      <div class="user-name">👤 ${user.name||user.email||'이름없음'}</div>
-      <div class="user-meta">
-        UID: ${user.uid.substring(0,12)}... · ${user.provider||'-'} · 가입: ${(user.createdAt||'').substring(0,10)}<br>
-        저장 번호: ${nums.length}개 · 당첨: ${winCount}건
-      </div>
-      <button class="btn btn-blue btn-sm" style="margin-top:6px" onclick="showUserDetail('${user.uid}')">🔎 상세보기</button>
-    </div>`;
+  var total=allNums.length||1;
+  var labels={1:'🏆 1등 (6개)',2:'🥈 2등 (5개+보너스)',3:'🥉 3등 (5개)',4:'🎯 4등 (4개)',5:'✅ 5등 (3개)'};
+  var html='<table class="data-table"><tr><th>등수</th><th>당첨자</th><th>적중률</th></tr>';
+  for(var p=1;p<=5;p++){
+    html+='<tr><td>'+labels[p]+'</td><td style="font-weight:700;color:#fbbf24">'+w[p].length+'명</td><td>'+((w[p].length/total)*100).toFixed(2)+'%</td></tr>';
+  }
+  html+='<tr style="border-top:2px solid #333"><td><b>합계</b></td><td style="font-weight:700;color:#34d399"><b>'+(w[1].length+w[2].length+w[3].length+w[4].length+w[5].length)+'명</b></td><td>'+((((w[1].length+w[2].length+w[3].length+w[4].length+w[5].length)/total)*100).toFixed(2))+'%</td></tr>';
+  html+='</table>';
+  document.getElementById('winnerStats').innerHTML=html;
+}
+
+function showWinnerList(){
+  var allNums=getAllNumbers();
+  var winners=[];
+  for(var i=0;i<allNums.length;i++){
+    if(allNums[i].entry.result && allNums[i].entry.result.matchCount>=3) winners.push(allNums[i]);
+  }
+  winners.sort(function(a,b){
+    var pa=a.entry.result.prize||5,pb=b.entry.result.prize||5;
+    return pa-pb;
   });
-  el.innerHTML = html;
+  if(winners.length===0){document.getElementById('winnerList').innerHTML='<p style="color:#666;font-size:12px;text-align:center;padding:12px">당첨자 없음</p>';return;}
+  var html='<table class="data-table"><tr><th>등수</th><th>사용자</th><th>번호</th><th>회차</th><th>일치</th></tr>';
+  for(var i=0;i<Math.min(50,winners.length);i++){
+    var w=winners[i];
+    var user=null;for(var j=0;j<allUsers.length;j++){if(allUsers[j].uid===w.uid){user=allUsers[j];break;}}
+    var p=w.entry.result.prize||'5';
+    var labels={1:'🏆1등',2:'🥈2등',3:'🥉3등',4:'🎯4등',5:'✅5등'};
+    html+='<tr><td>'+(labels[p]||p+'등')+'</td><td>'+(user?(user.name||user.email||'익명'):'익명')+'</td><td>['+w.entry.numbers.join(',')+']</td><td>'+w.entry.result.round+'회</td><td>'+w.entry.result.matchCount+'개</td></tr>';
+  }
+  html+='</table>';
+  if(winners.length>50) html+='<div style="text-align:center;color:#888;font-size:11px;margin-top:4px">상위 50건만 표시 (총 '+winners.length+'건)</div>';
+  document.getElementById('winnerList').innerHTML=html;
+}
+
+function showGradeHitRate(){
+  var allNums=getAllNumbers();
+  var gradeData={S:{total:0,wins:0},A:{total:0,wins:0},B:{total:0,wins:0},C:{total:0,wins:0},D:{total:0,wins:0}};
+  for(var i=0;i<allNums.length;i++){
+    var g=allNums[i].entry.grade||'D';
+    if(!gradeData[g]) gradeData[g]={total:0,wins:0};
+    gradeData[g].total++;
+    if(allNums[i].entry.result && allNums[i].entry.result.matchCount>=3) gradeData[g].wins++;
+  }
+  var colors={S:'#fbbf24',A:'#f87171',B:'#60a5fa',C:'#34d399',D:'#555'};
+  var html='';
+  var grades=['S','A','B','C','D'];
+  for(var i=0;i<grades.length;i++){
+    var g=grades[i];
+    var d=gradeData[g];
+    var rate=d.total>0?((d.wins/d.total)*100).toFixed(1):'0.0';
+    var barW=d.total>0?Math.max((d.wins/d.total)*100*3,2):2;
+    html+='<div class="stat-row"><div class="stat-label"><span>'+g+'등급 ('+d.total+'건)</span><span>'+d.wins+'당첨 ('+rate+'%)</span></div><div class="stat-bar" style="width:'+barW+'%;background:'+colors[g]+'">'+rate+'%</div></div>';
+  }
+  document.getElementById('gradeHitRate').innerHTML=html;
+}
+
+// ============ 사용자 통계 ============
+function showUserStats(){
+  var today=new Date().toISOString().substring(0,10);
+  var week=new Date(Date.now()-7*24*60*60*1000).toISOString().substring(0,10);
+  var newToday=0,activeWeek=0,noSave=0;
+  for(var i=0;i<allUsers.length;i++){
+    var u=allUsers[i];
+    if((u.createdAt||'').substring(0,10)===today) newToday++;
+    if((u.lastLogin||'')>=week) activeWeek++;
+    var nums=allUserNumbers[u.uid]||[];
+    if(nums.length===0) noSave++;
+  }
+  var total=allUsers.length||1;
+  var html='<div class="dash-grid">'+
+    '<div class="dash-item"><div class="dash-num">'+allUsers.length+'</div><div class="dash-label">총 사용자</div></div>'+
+    '<div class="dash-item green"><div class="dash-num">'+newToday+'</div><div class="dash-label">오늘 신규</div></div>'+
+    '<div class="dash-item blue"><div class="dash-num">'+activeWeek+'</div><div class="dash-label">활성(7일)</div></div>'+
+    '<div class="dash-item yellow"><div class="dash-num">'+noSave+'</div><div class="dash-label">미저장 사용자</div></div>'+
+    '<div class="dash-item purple"><div class="dash-num">'+((noSave/total)*100).toFixed(0)+'%</div><div class="dash-label">이탈률</div></div>'+
+    '<div class="dash-item pink"><div class="dash-num">'+(getAllNumbers().length/(total)).toFixed(1)+'</div><div class="dash-label">인당 평균 저장</div></div>'+
+    '</div>';
+  document.getElementById('userStats').innerHTML=html;
+}
+
+function showUserList(){
+  if(allUsers.length===0){document.getElementById('userList').innerHTML='<p style="color:#666;font-size:12px;text-align:center;padding:12px">사용자 없음</p>';return;}
+  renderUserList(allUsers);
 }
 
 function filterUsers(){
-  let keyword = document.getElementById('userSearch').value.toLowerCase();
-  let el = document.getElementById('userList');
-  let filtered = allUsers.filter(u=>{
-    let name = (u.name||u.email||'').toLowerCase();
-    return name.includes(keyword);
-  });
-  let html='';
-  filtered.forEach(user=>{
-    let nums = allUserNumbers[user.uid] || [];
-    let winCount = nums.filter(n=>n.result && n.result.matchCount>=3).length;
-    html+=`<div class="user-item">
-      <div class="user-name">👤 ${user.name||user.email||'이름없음'}</div>
-      <div class="user-meta">
-        UID: ${user.uid.substring(0,12)}... · ${user.provider||'-'} · 저장: ${nums.length}개 · 당첨: ${winCount}건
-      </div>
-      <button class="btn btn-blue btn-sm" style="margin-top:6px" onclick="showUserDetail('${user.uid}')">🔎 상세보기</button>
-    </div>`;
-  });
-  if(filtered.length===0) html='<p style="color:#666;font-size:12px;text-align:center;padding:12px">검색 결과 없음</p>';
-  el.innerHTML = html;
+  var keyword=document.getElementById('userSearch').value.toLowerCase();
+  var filtered=[];
+  for(var i=0;i<allUsers.length;i++){
+    var name=((allUsers[i].name||'')+(allUsers[i].email||'')).toLowerCase();
+    if(name.indexOf(keyword)>=0) filtered.push(allUsers[i]);
+  }
+  renderUserList(filtered);
 }
 
-// ============ 사용자 상세보기 ============
-function showUserDetail(uid){
-  // 섹션 열기
-  let body = document.getElementById('userDetailBody');
-  if(!body.classList.contains('open')){
-    body.classList.add('open');
+function renderUserList(users){
+  var html='';
+  for(var i=0;i<users.length;i++){
+    var user=users[i];
+    var nums=allUserNumbers[user.uid]||[];
+    var winCount=0;
+    for(var j=0;j<nums.length;j++){if(nums[j].result&&nums[j].result.matchCount>=3)winCount++;}
+    html+='<div class="user-item"><div class="user-name">👤 '+(user.name||user.email||'이름없음')+'</div><div class="user-meta">'+user.uid.substring(0,12)+'... · '+(user.provider||'-')+' · 가입: '+((user.createdAt||'').substring(0,10))+'<br>저장: '+nums.length+'개 · 당첨: '+winCount+'건</div><button class="btn btn-blue btn-sm" style="margin-top:6px" onclick="showUserDetail(\''+user.uid+'\')">🔎 상세보기</button></div>';
   }
+  if(users.length===0) html='<p style="color:#666;font-size:12px;text-align:center;padding:12px">검색 결과 없음</p>';
+  document.getElementById('userList').innerHTML=html;
+}
 
-  let user = allUsers.find(u=>u.uid===uid);
-  let nums = allUserNumbers[uid] || [];
-  let el = document.getElementById('userDetail');
-
-  let html = `<div style="background:#1a1a2e;border-radius:10px;padding:12px;margin-bottom:8px">
-    <div style="font-size:14px;font-weight:700;color:#a78bfa">👤 ${user?.name||user?.email||'이름없음'}</div>
-    <div style="font-size:11px;color:#888;margin-top:4px">
-      UID: ${uid}<br>
-      가입 방법: ${user?.provider||'-'}<br>
-      가입일: ${user?.createdAt||'-'}<br>
-      마지막 로그인: ${user?.lastLogin||'-'}<br>
-      총 저장 번호: ${nums.length}개
-    </div>
-  </div>`;
-
+function showUserDetail(uid){
+  var user=null;for(var i=0;i<allUsers.length;i++){if(allUsers[i].uid===uid){user=allUsers[i];break;}}
+  var nums=allUserNumbers[uid]||[];
+  var html='<div style="background:#1a1a2e;border-radius:10px;padding:12px;margin-bottom:8px"><div style="font-size:14px;font-weight:700;color:#a78bfa">👤 '+(user?user.name||user.email||'이름없음':'')+'</div><div style="font-size:11px;color:#888;margin-top:4px">UID: '+uid+'<br>가입: '+(user?user.provider||'-':'-')+' · '+(user?(user.createdAt||'-'):'-')+'<br>마지막 접속: '+(user?(user.lastLogin||'-'):'-')+'<br>총 저장: '+nums.length+'개</div></div>';
   if(nums.length===0){
     html+='<p style="color:#666;font-size:12px;text-align:center;padding:12px">저장된 번호 없음</p>';
   } else {
-    nums.forEach(entry=>{
-      let matchInfo = '';
+    for(var i=0;i<nums.length;i++){
+      var entry=nums[i];
+      var matchInfo='';
       if(entry.result){
-        let mc = entry.result.matchCount;
-        let label = mc>=6?'🏆1등':mc===5?'🎉3등':mc===4?'🎊4등':'5등';
-        matchInfo = `<div style="color:#34d399;margin-top:4px">✅ ${entry.result.round}회 ${label} (${mc}개 일치) [${(entry.result.matchedNumbers||[]).join(',')}]</div>`;
+        var mc=entry.result.matchCount;
+        var p=entry.result.prize||(mc>=6?1:mc===5?3:mc===4?4:mc===3?5:0);
+        var labels={1:'🏆1등',2:'🥈2등',3:'🥉3등',4:'🎊4등',5:'✅5등'};
+        matchInfo='<div style="color:#34d399;margin-top:4px">'+(labels[p]||p+'등')+' ('+mc+'개 일치) ['+(entry.result.matchedNumbers||[]).join(',')+']</div>';
       }
-      html+=`<div class="user-num-row">
-        <div style="color:#888">${entry.date||'-'} ${entry.time||''} · ${entry.grade||'-'}등급 · 대상 ${entry.targetRound||'?'}회</div>
-        <div style="margin-top:4px">${entry.numbers.map(n=>ballHTML(n)).join('')}</div>
-        <div style="color:#666;font-size:10px;margin-top:2px">${entry.patternKey||''}</div>
-        ${matchInfo}
-      </div>`;
-    });
+      var ballsStr='';for(var b=0;b<entry.numbers.length;b++){ballsStr+=ballHTML(entry.numbers[b]);}
+      html+='<div class="user-num-row"><div style="color:#888">'+(entry.date||'-')+' '+(entry.time||'')+' · '+(entry.grade||'-')+'등급 · 대상 '+(entry.targetRound||'?')+'회</div><div style="margin-top:4px">'+ballsStr+'</div>'+matchInfo+'</div>';
+    }
   }
-
-  el.innerHTML = html;
-  el.scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('userDetail').innerHTML=html;
+  document.getElementById('userDetail').scrollIntoView({behavior:'smooth'});
 }
 
-// ============ 전체 통계 ============
-function showGlobalStats(){
-  let el = document.getElementById('globalStats');
-  let gradeCount = {S:0, A:0, B:0, C:0, D:0};
-  let totalNums = 0;
-  let winsByGrade = {S:0, A:0, B:0, C:0, D:0};
-  let popularNumbers = {};
-
-  Object.values(allUserNumbers).forEach(nums=>{
-    nums.forEach(entry=>{
-      totalNums++;
-      let g = entry.grade || 'D';
-      gradeCount[g] = (gradeCount[g]||0) + 1;
-      if(entry.result && entry.result.matchCount>=3){
-        winsByGrade[g] = (winsByGrade[g]||0) + 1;
-      }
-      entry.numbers.forEach(n=>{
-        popularNumbers[n] = (popularNumbers[n]||0) + 1;
-      });
-    });
-  });
-
-  // 인기 번호 TOP 10
-  let popSorted = Object.entries(popularNumbers).sort((a,b)=>b[1]-a[1]).slice(0,10);
-
-  let html = `<div style="margin-bottom:12px">
-    <div style="font-size:13px;font-weight:700;margin-bottom:8px">등급별 저장 & 적중률</div>
-    <table class="data-table">
-      <tr><th>등급</th><th>저장 수</th><th>5등이상</th><th>적중률</th></tr>
-      ${['S','A','B','C','D'].map(g=>{
-        let total = gradeCount[g]||0;
-        let wins = winsByGrade[g]||0;
-        let rate = total>0 ? ((wins/total)*100).toFixed(1) : '0.0';
-        return `<tr><td style="font-weight:700">${g}</td><td>${total}</td><td>${wins}</td><td>${rate}%</td></tr>`;
-      }).join('')}
-    </table>
-  </div>`;
-
-  html += `<div>
-    <div style="font-size:13px;font-weight:700;margin-bottom:8px">사용자 인기 번호 TOP 10</div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px">
-      ${popSorted.map(([num, count],i)=>`<div style="text-align:center">
-        ${ballHTML(parseInt(num))}
-        <div style="font-size:10px;color:#888">${count}회</div>
-      </div>`).join('')}
-    </div>
-  </div>`;
-
-  if(popSorted.length===0) html+='<p style="color:#666;font-size:12px;text-align:center;padding:12px">아직 데이터 없음</p>';
-  el.innerHTML = html;
+// ============ 패턴 분석 ============
+function showGradePreference(){
+  var allNums=getAllNumbers();
+  var counts={S:0,A:0,B:0,C:0,AI:0,D:0};
+  for(var i=0;i<allNums.length;i++){
+    var g=allNums[i].entry.grade||'D';
+    counts[g]=(counts[g]||0)+1;
+  }
+  var total=allNums.length||1;
+  var colors={S:'#fbbf24',A:'#f87171',B:'#60a5fa',C:'#34d399',AI:'#a78bfa',D:'#555'};
+  var html='';
+  var grades=['S','A','B','C','D'];
+  for(var i=0;i<grades.length;i++){
+    var g=grades[i];
+    var pct=((counts[g]/total)*100).toFixed(1);
+    var barW=Math.max((counts[g]/total)*100,2);
+    html+='<div class="stat-row"><div class="stat-label"><span>'+g+'등급</span><span>'+counts[g]+'건 ('+pct+'%)</span></div><div class="stat-bar" style="width:'+barW+'%;background:'+colors[g]+'">'+pct+'%</div></div>';
+  }
+  document.getElementById('gradePreference').innerHTML=html;
 }
 
-// ============ 데이터 백업 ============
+function showAIvsManual(){
+  var allNums=getAllNumbers();
+  var ai=0,manual=0;
+  for(var i=0;i<allNums.length;i++){
+    var g=allNums[i].entry.grade||'';
+    if(g==='AI') ai++;
+    else manual++;
+  }
+  var total=(ai+manual)||1;
+  var html='<div class="dash-grid" style="grid-template-columns:1fr 1fr">'+
+    '<div class="dash-item purple"><div class="dash-num">'+ai+'</div><div class="dash-label">AI 추천 ('+((ai/total)*100).toFixed(1)+'%)</div></div>'+
+    '<div class="dash-item blue"><div class="dash-num">'+manual+'</div><div class="dash-label">등급 수동 선택 ('+((manual/total)*100).toFixed(1)+'%)</div></div>'+
+    '</div>';
+  document.getElementById('aiVsManual').innerHTML=html;
+}
+
+function showPopularPatterns(){
+  var allNums=getAllNumbers();
+  var patMap={};
+  for(var i=0;i<allNums.length;i++){
+    var pk=allNums[i].entry.patternKey||'없음';
+    patMap[pk]=(patMap[pk]||0)+1;
+  }
+  var arr=[];for(var k in patMap){arr.push({key:k,count:patMap[k]});}
+  arr.sort(function(a,b){return b.count-a.count;});
+  var top10=arr.slice(0,10);
+  if(top10.length===0){document.getElementById('popularPatterns').innerHTML='<p style="color:#666;font-size:12px;text-align:center;padding:12px">데이터 없음</p>';return;}
+  var html='';
+  for(var i=0;i<top10.length;i++){
+    html+='<div style="background:#1a1a2e;border-radius:8px;padding:8px;margin-bottom:4px;font-size:12px;display:flex;justify-content:space-between"><span>'+(i+1)+'위 '+top10[i].key+'</span><span style="color:#667eea;font-weight:700">'+top10[i].count+'건</span></div>';
+  }
+  document.getElementById('popularPatterns').innerHTML=html;
+}
+
+// ============ 번호 분석 ============
+function showPopularNumbers(){
+  var allNums=getAllNumbers();
+  var numCount={};
+  for(var i=0;i<allNums.length;i++){
+    var nums=allNums[i].entry.numbers;
+    for(var j=0;j<nums.length;j++){numCount[nums[j]]=(numCount[nums[j]]||0)+1;}
+  }
+  var arr=[];for(var n in numCount){arr.push({num:parseInt(n),count:numCount[n]});}
+  arr.sort(function(a,b){return b.count-a.count;});
+  var top15=arr.slice(0,15);
+  if(top15.length===0){document.getElementById('popularNumbers').innerHTML='<p style="color:#666;font-size:12px;text-align:center;padding:12px">데이터 없음</p>';return;}
+  var html='<div style="display:flex;flex-wrap:wrap;gap:10px">';
+  for(var i=0;i<top15.length;i++){
+    html+='<div style="text-align:center">'+ballHTML(top15[i].num)+'<div style="font-size:10px;color:#888">'+top15[i].count+'회</div></div>';
+  }
+  html+='</div>';
+  document.getElementById('popularNumbers').innerHTML=html;
+}
+
+function showUnpopularNumbers(){
+  var allNums=getAllNumbers();
+  var numCount={};
+  for(var n=1;n<=45;n++) numCount[n]=0;
+  for(var i=0;i<allNums.length;i++){
+    var nums=allNums[i].entry.numbers;
+    for(var j=0;j<nums.length;j++){numCount[nums[j]]=(numCount[nums[j]]||0)+1;}
+  }
+  var arr=[];for(var n in numCount){arr.push({num:parseInt(n),count:numCount[n]});}
+  arr.sort(function(a,b){return a.count-b.count;});
+  var top15=arr.slice(0,15);
+  var html='<div style="display:flex;flex-wrap:wrap;gap:10px">';
+  for(var i=0;i<top15.length;i++){
+    html+='<div style="text-align:center">'+ballHTML(top15[i].num)+'<div style="font-size:10px;color:#888">'+top15[i].count+'회</div></div>';
+  }
+  html+='</div>';
+  document.getElementById('unpopularNumbers').innerHTML=html;
+}
+
+function showDuplicateNumbers(){
+  var allNums=getAllNumbers();
+  var combMap={};
+  for(var i=0;i<allNums.length;i++){
+    var key=allNums[i].entry.numbers.slice().sort(function(a,b){return a-b;}).join(',');
+    if(!combMap[key]) combMap[key]={numbers:allNums[i].entry.numbers,count:0,users:[]};
+    combMap[key].count++;
+    var uid=allNums[i].uid;
+    var found=false;for(var j=0;j<combMap[key].users.length;j++){if(combMap[key].users[j]===uid){found=true;break;}}
+    if(!found) combMap[key].users.push(uid);
+  }
+  var arr=[];for(var k in combMap){if(combMap[k].count>=2) arr.push(combMap[k]);}
+  arr.sort(function(a,b){return b.count-a.count;});
+  if(arr.length===0){document.getElementById('duplicateNumbers').innerHTML='<p style="color:#666;font-size:12px;text-align:center;padding:12px">중복 조합 없음</p>';return;}
+  var html='';
+  for(var i=0;i<Math.min(10,arr.length);i++){
+    var d=arr[i];
+    var ballsStr='';for(var b=0;b<d.numbers.length;b++){ballsStr+=ballHTML(d.numbers[b]);}
+    html+='<div style="background:#1a1a2e;border-radius:8px;padding:8px;margin-bottom:4px;font-size:12px"><div>'+ballsStr+'</div><div style="color:#888;font-size:10px;margin-top:4px">'+d.count+'회 저장 · '+d.users.length+'명</div></div>';
+  }
+  document.getElementById('duplicateNumbers').innerHTML=html;
+}
+
+function showSavesByRound(){
+  var allNums=getAllNumbers();
+  var roundMap={};
+  for(var i=0;i<allNums.length;i++){
+    var r=allNums[i].entry.targetRound||0;
+    roundMap[r]=(roundMap[r]||0)+1;
+  }
+  var arr=[];for(var r in roundMap){arr.push({round:parseInt(r),count:roundMap[r]});}
+  arr.sort(function(a,b){return b.round-a.round;});
+  var top10=arr.slice(0,10);
+  if(top10.length===0){document.getElementById('savesByRound').innerHTML='<p style="color:#666;font-size:12px;text-align:center;padding:12px">데이터 없음</p>';return;}
+  var maxCount=top10[0].count||1;
+  var html='';
+  for(var i=0;i<top10.length;i++){
+    var barW=Math.max((top10[i].count/maxCount)*100,5);
+    html+='<div class="stat-row"><div class="stat-label"><span>'+top10[i].round+'회차</span><span>'+top10[i].count+'건</span></div><div class="stat-bar" style="width:'+barW+'%;background:#667eea">'+top10[i].count+'</div></div>';
+  }
+  document.getElementById('savesByRound').innerHTML=html;
+}
+
+// ============ 성장 추이 ============
+function showGrowthStats(){
+  var today=new Date();
+  var days7=0,days30=0;
+  for(var i=0;i<allUsers.length;i++){
+    var d=new Date(allUsers[i].createdAt||0);
+    var diff=(today-d)/(1000*60*60*24);
+    if(diff<=7) days7++;
+    if(diff<=30) days30++;
+  }
+  var allNums=getAllNumbers();
+  var saves7=0,saves30=0;
+  for(var i=0;i<allNums.length;i++){
+    var d=new Date(allNums[i].entry.timestamp||0);
+    var diff=(today-d)/(1000*60*60*24);
+    if(diff<=7) saves7++;
+    if(diff<=30) saves30++;
+  }
+  var html='<div class="dash-grid">'+
+    '<div class="dash-item green"><div class="dash-num">'+days7+'</div><div class="dash-label">7일 신규가입</div></div>'+
+    '<div class="dash-item blue"><div class="dash-num">'+days30+'</div><div class="dash-label">30일 신규가입</div></div>'+
+    '<div class="dash-item"><div class="dash-num">'+allUsers.length+'</div><div class="dash-label">누적 사용자</div></div>'+
+    '<div class="dash-item yellow"><div class="dash-num">'+saves7+'</div><div class="dash-label">7일 저장 건수</div></div>'+
+    '<div class="dash-item purple"><div class="dash-num">'+saves30+'</div><div class="dash-label">30일 저장 건수</div></div>'+
+    '<div class="dash-item pink"><div class="dash-num">'+allNums.length+'</div><div class="dash-label">누적 저장 건수</div></div>'+
+    '</div>';
+  document.getElementById('growthStats').innerHTML=html;
+}
+
+function showHourlyPattern(){
+  var allNums=getAllNumbers();
+  var hours=[];for(var i=0;i<24;i++) hours.push(0);
+  for(var i=0;i<allNums.length;i++){
+    var t=allNums[i].entry.time||'';
+    if(t.length>=2){
+      var h=parseInt(t.substring(0,2));
+      if(!isNaN(h)&&h>=0&&h<24) hours[h]++;
+    }
+  }
+  var max=1;for(var i=0;i<24;i++){if(hours[i]>max)max=hours[i];}
+  var html='';
+  for(var i=0;i<24;i++){
+    var barW=Math.max((hours[i]/max)*100,2);
+    var label=i+'시';
+    html+='<div class="stat-row"><div class="stat-label"><span>'+label+'</span><span>'+hours[i]+'건</span></div><div class="stat-bar" style="width:'+barW+'%;background:#667eea;height:14px;font-size:9px">'+hours[i]+'</div></div>';
+  }
+  document.getElementById('hourlyPattern').innerHTML=html;
+}
+
+function showWeekdayPattern(){
+  var allNums=getAllNumbers();
+  var days=[0,0,0,0,0,0,0];
+  var dayNames=['일','월','화','수','목','금','토'];
+  for(var i=0;i<allNums.length;i++){
+    var ts=allNums[i].entry.timestamp;
+    if(ts){
+      var d=new Date(ts);
+      days[d.getDay()]++;
+    }
+  }
+  var max=1;for(var i=0;i<7;i++){if(days[i]>max)max=days[i];}
+  var colors=['#ef4444','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ec4899','#ef4444'];
+  var html='';
+  for(var i=0;i<7;i++){
+    var barW=Math.max((days[i]/max)*100,2);
+    html+='<div class="stat-row"><div class="stat-label"><span>'+dayNames[i]+'요일</span><span>'+days[i]+'건</span></div><div class="stat-bar" style="width:'+barW+'%;background:'+colors[i]+'">'+days[i]+'</div></div>';
+  }
+  document.getElementById('weekdayPattern').innerHTML=html;
+}
+
+function showProviderStats(){
+  var provMap={};
+  for(var i=0;i<allUsers.length;i++){
+    var p=allUsers[i].provider||'기타';
+    provMap[p]=(provMap[p]||0)+1;
+  }
+  var total=allUsers.length||1;
+  var colors={kakao:'#FEE500',google:'#4285F4',email:'#10b981','기타':'#555'};
+  var html='';
+  for(var p in provMap){
+    var pct=((provMap[p]/total)*100).toFixed(1);
+    var barW=Math.max((provMap[p]/total)*100,5);
+    html+='<div class="stat-row"><div class="stat-label"><span>'+p+'</span><span>'+provMap[p]+'명 ('+pct+'%)</span></div><div class="stat-bar" style="width:'+barW+'%;background:'+(colors[p]||'#667eea')+'">'+provMap[p]+'</div></div>';
+  }
+  if(allUsers.length===0) html='<p style="color:#666;font-size:12px;text-align:center;padding:12px">데이터 없음</p>';
+  document.getElementById('providerStats').innerHTML=html;
+}
+
+// ============ 백업 ============
 function backupDraws(){
-  let data = JSON.stringify(allData, null, 2);
-  downloadFile('lotto_draws_backup.json', data);
+  downloadFile('lotto_draws_backup.json',JSON.stringify(allData,null,2));
   showToast('당첨번호 백업 완료');
 }
 
 function backupUsers(){
-  let data = {
-    users: allUsers,
-    userNumbers: allUserNumbers,
-    exportedAt: new Date().toISOString()
-  };
-  downloadFile('lotto_users_backup.json', JSON.stringify(data, null, 2));
+  downloadFile('lotto_users_backup.json',JSON.stringify({users:allUsers,userNumbers:allUserNumbers,exportedAt:new Date().toISOString()},null,2));
   showToast('사용자 데이터 백업 완료');
 }
 
-function downloadFile(filename, content){
-  let blob = new Blob([content], {type:'application/json'});
-  let url = URL.createObjectURL(blob);
-  let a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
+function backupAll(){
+  var data={
+    draws:allData,
+    users:allUsers,
+    userNumbers:allUserNumbers,
+    stats:{
+      totalUsers:allUsers.length,
+      totalNumbers:getAllNumbers().length,
+      totalDraws:allData.length
+    },
+    exportedAt:new Date().toISOString()
+  };
+  downloadFile('lotto_full_backup_'+new Date().toISOString().substring(0,10)+'.json',JSON.stringify(data,null,2));
+  showToast('전체 백업 완료');
+}
+
+function downloadFile(filename,content){
+  var blob=new Blob([content],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download=filename;a.click();
   URL.revokeObjectURL(url);
-}
-
-// ============ 볼 HTML ============
-function getBallClass(n){
-  if(n<=10) return 'b1';
-  if(n<=20) return 'b2';
-  if(n<=30) return 'b3';
-  if(n<=40) return 'b4';
-  return 'b5';
-}
-function ballHTML(n, extra=''){
-  return `<span class="ball ${getBallClass(n)} ${extra}">${n}</span>`;
-}
-
-// ============ 접기/펼치기 ============
-function toggleSection(id, titleEl){
-  let el = document.getElementById(id);
-  el.classList.toggle('open');
-  if(titleEl) titleEl.classList.toggle('open');
 }
 
 // ============ 토스트 ============
 function showToast(msg){
-  let t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 2000);
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.remove('show');
+  void t.offsetWidth;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2000);
+}
+
+// ============ 섹션 토글 ============
+function toggleSection(id,titleEl){
+  document.getElementById(id).classList.toggle('open');
+  if(titleEl)titleEl.classList.toggle('open');
 }
 
 // ============ 전체 새로고침 ============
-function refreshAdminAll(){
+function refreshAll(){
   showDashboard();
+  showWinSummary();
+  showHighlights();
   showDrawList();
-  showUserList();
-  showGlobalStats();
   autoFillRound();
+  showWinnerStats();
+  showWinnerList();
+  showGradeHitRate();
+  showUserStats();
+  showUserList();
+  showGradePreference();
+  showAIvsManual();
+  showPopularPatterns();
+  showPopularNumbers();
+  showUnpopularNumbers();
+  showDuplicateNumbers();
+  showSavesByRound();
+  showGrowthStats();
+  showHourlyPattern();
+  showWeekdayPattern();
+  showProviderStats();
 }
 </script>
 </body>
