@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AI 로또 분석기 - 관리자</title>
+<script src="lotto_data.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Malgun Gothic',sans-serif;background:#0a0a1a;color:#eee;min-height:100vh;padding-bottom:40px}
+.container{max-width:600px;margin:0 auto;padding:12px}
+
+/* 헤더 */
+.header{text-align:center;padding:20px 0 10px}
+.header h1{font-size:22px;color:#fff}
+.header h1 span{color:#ef4444}
+.header .sub{color:#888;font-size:11px;margin-top:4px}
+
+/* 관리자 잠금 */
+.lock-screen{text-align:center;padding:60px 20px}
+.lock-screen h2{color:#888;font-size:18px;margin-bottom:16px}
+.lock-screen input{width:200px;padding:12px;border-radius:10px;border:1px solid #333;background:#1a1a2e;color:#eee;font-size:14px;text-align:center;margin-bottom:12px}
+.lock-screen button{display:block;margin:0 auto;padding:12px 40px;border-radius:10px;border:none;background:#ef4444;color:#fff;font-size:14px;font-weight:700;cursor:pointer}
+.lock-screen .error{color:#ef4444;font-size:12px;margin-top:8px}
+
+/* 카드 */
+.card{background:#12122a;border:1px solid #1e1e3a;border-radius:16px;padding:16px;margin-bottom:12px}
+.card-title{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.card-title .icon{font-size:18px}
+.card-title.collapsible{cursor:pointer;user-select:none}
+.card-title.collapsible::after{content:'▼';margin-left:auto;font-size:10px;color:#666;transition:transform 0.3s}
+.card-title.collapsible.open::after{transform:rotate(180deg)}
+.collapse-body{max-height:0;overflow:hidden;transition:max-height 0.4s ease}
+.collapse-body.open{max-height:50000px}
+
+/* 대시보드 */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.dash-item{background:#1a1a2e;border-radius:10px;padding:14px;text-align:center}
+.dash-num{font-size:24px;font-weight:800;color:#667eea}
+.dash-label{font-size:10px;color:#888;margin-top:2px}
+.dash-item.red .dash-num{color:#ef4444}
+.dash-item.green .dash-num{color:#34d399}
+.dash-item.yellow .dash-num{color:#fbbf24}
+
+/* 입력 폼 */
+.input-group{margin-bottom:12px}
+.input-group label{display:block;font-size:12px;color:#888;margin-bottom:4px}
+.input-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.input-row input{width:52px;padding:10px 4px;border-radius:8px;border:1px solid #333;background:#1a1a2e;color:#eee;font-size:14px;text-align:center}
+.input-row input.wide{width:80px}
+.btn{padding:10px 16px;border-radius:10px;border:none;font-weight:700;cursor:pointer;font-size:13px}
+.btn-red{background:#ef4444;color:#fff}
+.btn-blue{background:#667eea;color:#fff}
+.btn-green{background:#10b981;color:#fff}
+.btn-gray{background:#374151;color:#aaa}
+.btn-sm{padding:6px 12px;font-size:11px}
+.form-actions{display:flex;gap:8px;margin-top:8px}
+
+/* 상태 메시지 */
+.msg{font-size:12px;margin-top:8px;padding:8px;border-radius:8px}
+.msg.success{background:#064e3b;color:#34d399}
+.msg.error{background:#7f1d1d;color:#fca5a5}
+
+/* 유저 목록 */
+.user-item{background:#1a1a2e;border-radius:10px;padding:12px;margin-bottom:8px}
+.user-name{font-size:13px;font-weight:700;color:#a78bfa}
+.user-meta{font-size:11px;color:#888;margin-top:2px}
+.user-numbers{margin-top:8px}
+.user-num-row{background:#0a0a1a;border-radius:6px;padding:8px;margin-bottom:4px;font-size:11px}
+
+/* 볼 */
+.ball{display:inline-flex;width:32px;height:32px;border-radius:50%;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;margin:1px}
+.ball.b1{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
+.ball.b2{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+.ball.b3{background:linear-gradient(135deg,#f87171,#ef4444)}
+.ball.b4{background:linear-gradient(135deg,#888,#555)}
+.ball.b5{background:linear-gradient(135deg,#34d399,#10b981)}
+.ball.bonus{background:linear-gradient(135deg,#c084fc,#a855f7)}
+
+/* 테이블 */
+.data-table{width:100%;font-size:11px;border-collapse:collapse}
+.data-table th{color:#888;padding:8px 4px;border-bottom:1px solid #1e1e3a;text-align:left}
+.data-table td{padding:8px 4px;border-bottom:1px solid #0a0a1a}
+
+/* 검색 */
+.search-box{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#1a1a2e;color:#eee;font-size:13px;margin-bottom:12px}
+
+/* 토스트 */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 24px;border-radius:10px;font-size:13px;display:none;z-index:9999}
+.toast.show{display:block;animation:fadeInOut 2s ease}
+@keyframes fadeInOut{0%{opacity:0}15%{opacity:1}85%{opacity:1}100%{opacity:0}}
+
+.footer{text-align:center;color:#555;font-size:11px;padding:20px 0}
+</style>
+</head>
+<body>
+
+<!-- ========== 관리자 비밀번호 잠금 화면 ========== -->
+<div id="lockScreen" class="lock-screen">
+  <h2>🔒 관리자 전용</h2>
+  <div><input type="password" id="adminPw" placeholder="비밀번호 입력" onkeypress="if(event.key==='Enter')checkAdminPw()"></div>
+  <button onclick="checkAdminPw()">확인</button>
+  <div id="lockError" class="error"></div>
+</div>
+
+<!-- ========== 관리자 메인 화면 (잠금 해제 후) ========== -->
+<div id="adminMain" style="display:none">
+<div class="container">
+
+  <div class="header">
+    <h1>🛡️ <span>관리자</span> 대시보드</h1>
+    <div class="sub">AI 로또 분석기 백엔드 관리</div>
+  </div>
+
+  <!-- 대시보드 요약 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">📊</span> 전체 현황</div>
+    <div id="dashboard" class="dash-grid"></div>
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn btn-blue btn-sm" onclick="refreshDashboard()">🔄 새로고침</button>
+    </div>
+  </div>
+
+  <!-- 당첨번호 입력 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">✏️</span> 당첨번호 입력</div>
+    <div class="input-group">
+      <label>회차 번호</label>
+      <div class="input-row">
+        <input type="number" id="inputRound" class="wide" placeholder="회차">
+        <button class="btn btn-gray btn-sm" onclick="autoFillRound()">자동</button>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>당첨번호 6개</label>
+      <div class="input-row">
+        <input type="number" id="n1" min="1" max="45" placeholder="1">
+        <input type="number" id="n2" min="1" max="45" placeholder="2">
+        <input type="number" id="n3" min="1" max="45" placeholder="3">
+        <input type="number" id="n4" min="1" max="45" placeholder="4">
+        <input type="number" id="n5" min="1" max="45" placeholder="5">
+        <input type="number" id="n6" min="1" max="45" placeholder="6">
+      </div>
+    </div>
+    <div class="input-group">
+      <label>보너스 번호</label>
+      <div class="input-row">
+        <input type="number" id="nBonus" min="1" max="45" placeholder="보너스">
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-red" onclick="saveNewDraw()">💾 당첨번호 저장</button>
+      <button class="btn btn-gray" onclick="resetInput()">초기화</button>
+    </div>
+    <div id="drawMsg"></div>
+  </div>
+
+  <!-- 당첨 결과 일괄 체크 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🔍</span> 당첨 결과 일괄 체크</div>
+    <p style="color:#888;font-size:11px;margin-bottom:8px">모든 사용자의 저장 번호를 최신 당첨번호와 대조합니다</p>
+    <button class="btn btn-green" onclick="checkAllUsersResults()">🚀 전체 사용자 당첨 체크 실행</button>
+    <div id="checkResultMsg"></div>
+  </div>
+
+  <!-- 등록된 당첨번호 목록 -->
+  <div class="card">
+    <div class="card-title collapsible open" onclick="toggleSection('drawListBody',this)"><span class="icon">📋</span> 등록된 당첨번호 목록</div>
+    <div id="drawListBody" class="collapse-body open">
+      <div id="drawList"></div>
+    </div>
+  </div>
+
+  <!-- 전체 사용자 목록 -->
+  <div class="card">
+    <div class="card-title collapsible" onclick="toggleSection('userListBody',this)"><span class="icon">👥</span> 전체 사용자 목록</div>
+    <div id="userListBody" class="collapse-body">
+      <input class="search-box" id="userSearch" placeholder="이름 또는 이메일 검색..." oninput="filterUsers()">
+      <div id="userList"></div>
+    </div>
+  </div>
+
+  <!-- 사용자별 저장 번호 상세 -->
+  <div class="card">
+    <div class="card-title collapsible" onclick="toggleSection('userDetailBody',this)"><span class="icon">🔎</span> 사용자별 저장 번호 상세</div>
+    <div id="userDetailBody" class="collapse-body">
+      <p style="color:#888;font-size:11px;margin-bottom:8px">위 사용자 목록에서 '상세보기'를 클릭하세요</p>
+      <div id="userDetail"></div>
+    </div>
+  </div>
+
+  <!-- 전체 통계 -->
+  <div class="card">
+    <div class="card-title collapsible" onclick="toggleSection('statsBody',this)"><span class="icon">📈</span> 전체 통계</div>
+    <div id="statsBody" class="collapse-body">
+      <div id="globalStats"></div>
+    </div>
+  </div>
+
+  <!-- 데이터 백업 -->
+  <div class="card">
+    <div class="card-title collapsible" onclick="toggleSection('backupBody',this)"><span class="icon">💾</span> 데이터 백업</div>
+    <div id="backupBody" class="collapse-body">
+      <p style="color:#888;font-size:11px;margin-bottom:8px">전체 데이터를 JSON 파일로 다운로드합니다</p>
+      <div class="form-actions">
+        <button class="btn btn-blue" onclick="backupDraws()">📥 당첨번호 백업</button>
+        <button class="btn btn-green" onclick="backupUsers()">📥 사용자 데이터 백업</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">AI 로또 분석기 관리자 v5.0</div>
+</div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:"AIzaSyBdLvfI1ItgRLtGs1qFLBMjZIn3tPaI3Nw",
+  authDomain:"lottl-jihoon.firebaseapp.com",
+  projectId:"lottl-jihoon",
+  storageBucket:"lottl-jihoon.firebasestorage.app",
+  messagingSenderId:"814020270032",
+  appId:"1:814020270032:web:e4895c727d7d1e00ed0bd5"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.fireDB = db;
+window.fireCollection = collection;
+window.fireDoc = doc;
+window.fireSetDoc = setDoc;
+window.fireGetDocs = getDocs;
+window.fireDeleteDoc = deleteDoc;
+window.fireGetDoc = getDoc;
+window.firebaseReady = true;
+window.dispatchEvent(new Event('firebaseReady'));
+</script>
+
+<script>
+// ============ 전역 변수 ============
+let allData = [];
+let allUsers = [];
+let allUserNumbers = {}; // {uid: [numbers]}
+const ADMIN_PASSWORD = '1214'; // ⭐ 여기에 원하는 비밀번호를 넣으세요!
+
+// ============ 관리자 비밀번호 확인 ============
+function checkAdminPw(){
+  let pw = document.getElementById('adminPw').value;
+  if(pw === ADMIN_PASSWORD){
+    document.getElementById('lockScreen').style.display='none';
+    document.getElementById('adminMain').style.display='block';
+    initAdmin();
+  } else {
+    document.getElementById('lockError').textContent='비밀번호가 틀렸습니다';
+  }
+}
+
+// ============ 초기화 ============
+function initAdmin(){
+  initData();
+  if(window.firebaseReady){
+    loadAllFromFirebase();
+  } else {
+    window.addEventListener('firebaseReady', ()=>{ loadAllFromFirebase(); });
+  }
+}
+
+function initData(){
+  allData = [];
+  if(typeof LOTTO_DATA !== 'undefined'){
+    allData = LOTTO_DATA.slice();
+  }
+  let extra = JSON.parse(localStorage.getItem('extraDraws')||'[]');
+  extra.forEach(e=>{
+    if(!allData.find(d=>d.round===e.round)) allData.push(e);
+  });
+  allData.sort((a,b)=>a.round-b.round);
+}
+
+// ============ Firebase 전체 로드 ============
+async function loadAllFromFirebase(){
+  try {
+    // 당첨번호 로드
+    let drawSnap = await window.fireGetDocs(window.fireCollection(window.fireDB,'draws'));
+    drawSnap.forEach(docSnap=>{
+      let d = docSnap.data();
+      if(!allData.find(x=>x.round===d.round)) allData.push(d);
+    });
+    allData.sort((a,b)=>a.round-b.round);
+
+    // 사용자 목록 로드
+    let userSnap = await window.fireGetDocs(window.fireCollection(window.fireDB,'users'));
+    allUsers = [];
+    userSnap.forEach(docSnap=>{
+      allUsers.push({uid: docSnap.id, ...docSnap.data()});
+    });
+
+    // 각 사용자의 저장 번호 로드
+    allUserNumbers = {};
+    for(let user of allUsers){
+      try {
+        let numSnap = await window.fireGetDocs(window.fireCollection(window.fireDB,'users',user.uid,'numbers'));
+        let nums = [];
+        numSnap.forEach(docSnap=>{ nums.push(docSnap.data()); });
+        nums.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+        allUserNumbers[user.uid] = nums;
+      } catch(e){
+        allUserNumbers[user.uid] = [];
+      }
+    }
+
+    refreshAdminAll();
+    showToast('데이터 로드 완료');
+  } catch(e){
+    showToast('데이터 로드 실패: '+e.message);
+  }
+}
+
+// ============ 대시보드 ============
+function refreshDashboard(){
+  loadAllFromFirebase();
+}
+
+function showDashboard(){
+  let totalUsers = allUsers.length;
+  let totalNumbers = 0;
+  let totalMatch3=0, totalMatch4=0, totalMatch5=0, totalMatch6=0;
+
+  Object.values(allUserNumbers).forEach(nums=>{
+    totalNumbers += nums.length;
+    nums.forEach(n=>{
+      if(n.result){
+        if(n.result.matchCount===3) totalMatch3++;
+        if(n.result.matchCount===4) totalMatch4++;
+        if(n.result.matchCount===5) totalMatch5++;
+        if(n.result.matchCount>=6) totalMatch6++;
+      }
+    });
+  });
+
+  let totalWins = totalMatch3+totalMatch4+totalMatch5+totalMatch6;
+
+  document.getElementById('dashboard').innerHTML = `
+    <div class="dash-item"><div class="dash-num">${totalUsers}</div><div class="dash-label">총 사용자</div></div>
+    <div class="dash-item"><div class="dash-num">${totalNumbers}</div><div class="dash-label">총 저장 번호</div></div>
+    <div class="dash-item"><div class="dash-num">${allData.length}</div><div class="dash-label">등록 회차</div></div>
+    <div class="dash-item green"><div class="dash-num">${totalWins}</div><div class="dash-label">5등 이상 총 당첨</div></div>
+    <div class="dash-item yellow"><div class="dash-num">${totalMatch4+totalMatch5+totalMatch6}</div><div class="dash-label">4등 이상</div></div>
+    <div class="dash-item red"><div class="dash-num">${totalMatch6}</div><div class="dash-label">1등</div></div>
+  `;
+}
+
+// ============ 당첨번호 입력 ============
+function autoFillRound(){
+  if(allData.length>0){
+    document.getElementById('inputRound').value = allData[allData.length-1].round + 1;
+  }
+}
+
+function saveNewDraw(){
+  let round = parseInt(document.getElementById('inputRound').value);
+  let nums = [];
+  for(let i=1;i<=6;i++){
+    let v = parseInt(document.getElementById('n'+i).value);
+    if(isNaN(v)||v<1||v>45){
+      showMsg('drawMsg','error','번호를 1~45 사이로 입력하세요');
+      return;
+    }
+    if(nums.includes(v)){
+      showMsg('drawMsg','error','중복 번호가 있습니다');
+      return;
+    }
+    nums.push(v);
+  }
+  let bonus = parseInt(document.getElementById('nBonus').value);
+  if(isNaN(bonus)||bonus<1||bonus>45){
+    showMsg('drawMsg','error','보너스 번호를 입력하세요');
+    return;
+  }
+  if(isNaN(round)||round<1){
+    showMsg('drawMsg','error','회차를 입력하세요');
+    return;
+  }
+  if(allData.find(d=>d.round===round)){
+    showMsg('drawMsg','error',round+'회차는 이미 등록되어 있습니다');
+    return;
+  }
+
+  let newDraw = {
+    round,
+    numbers: nums.sort((a,b)=>a-b),
+    bonus,
+    addedAt: new Date().toISOString()
+  };
+
+  // 로컬 저장
+  allData.push(newDraw);
+  allData.sort((a,b)=>a.round-b.round);
+  let extra = JSON.parse(localStorage.getItem('extraDraws')||'[]');
+  extra.push(newDraw);
+  localStorage.setItem('extraDraws', JSON.stringify(extra));
+
+  // Firebase 저장
+  if(window.firebaseReady){
+    window.fireSetDoc(window.fireDoc(window.fireDB,'draws',String(round)), newDraw);
+  }
+
+  showMsg('drawMsg','success',round+'회 당첨번호가 저장되었습니다! ['+nums.join(', ')+'] + 보너스 '+bonus);
+  resetInput();
+  showDrawList();
+  showDashboard();
+  autoFillRound();
+}
+
+function resetInput(){
+  document.getElementById('inputRound').value='';
+  for(let i=1;i<=6;i++) document.getElementById('n'+i).value='';
+  document.getElementById('nBonus').value='';
+  autoFillRound();
+}
+
+function showMsg(id, type, text){
+  document.getElementById(id).innerHTML = `<div class="msg ${type}">${text}</div>`;
+  setTimeout(()=>{ document.getElementById(id).innerHTML=''; }, 5000);
+}
+
+// ============ 당첨번호 목록 ============
+function showDrawList(){
+  let el = document.getElementById('drawList');
+  let recent = allData.slice(-20).reverse();
+  let html = '<table class="data-table"><tr><th>회차</th><th>당첨번호</th><th>보너스</th><th>삭제</th></tr>';
+  recent.forEach(d=>{
+    let nums = d.numbers.slice().sort((a,b)=>a-b);
+    html+=`<tr>
+      <td>${d.round}</td>
+      <td>${nums.map(n=>ballHTML(n)).join('')}</td>
+      <td>${d.bonus?ballHTML(d.bonus,'bonus'):'-'}</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteDraw(${d.round})">삭제</button></td>
+    </tr>`;
+  });
+  html+='</table>';
+  if(allData.length>20) html+=`<div style="text-align:center;color:#888;font-size:11px;margin-top:8px">최근 20회만 표시 (총 ${allData.length}회)</div>`;
+  el.innerHTML = html;
+}
+
+async function deleteDraw(round){
+  if(!confirm(round+'회 당첨번호를 삭제할까요?')) return;
+  allData = allData.filter(d=>d.round!==round);
+  let extra = JSON.parse(localStorage.getItem('extraDraws')||'[]');
+  extra = extra.filter(d=>d.round!==round);
+  localStorage.setItem('extraDraws', JSON.stringify(extra));
+  if(window.firebaseReady){
+    await window.fireDeleteDoc(window.fireDoc(window.fireDB,'draws',String(round)));
+  }
+  showDrawList();
+  showDashboard();
+  showToast(round+'회 삭제됨');
+}
+
+// ============ 전체 사용자 당첨 체크 ============
+async function checkAllUsersResults(){
+  if(allData.length===0){
+    showMsg('checkResultMsg','error','등록된 당첨번호가 없습니다');
+    return;
+  }
+  let totalChecked=0, totalWins=0;
+
+  for(let user of allUsers){
+    let nums = allUserNumbers[user.uid] || [];
+    for(let entry of nums){
+      if(entry.result) continue; // 이미 체크됨
+      let target = entry.targetRound;
+      let draw = allData.find(d=>d.round===target);
+      if(!draw) continue;
+
+      let myNums = entry.numbers.slice().sort((a,b)=>a-b);
+      let drawNums = draw.numbers.slice().sort((a,b)=>a-b);
+      let matched = myNums.filter(n=>drawNums.includes(n));
+      totalChecked++;
+
+      if(matched.length>=3){
+        entry.result = {
+          round: draw.round,
+          matchCount: matched.length,
+          matchedNumbers: matched,
+          checkedAt: new Date().toISOString()
+        };
+        totalWins++;
+        // Firebase 업데이트
+        if(window.firebaseReady){
+          await window.fireSetDoc(
+            window.fireDoc(window.fireDB,'users',user.uid,'numbers',entry.id),
+            entry,
+            {merge:true}
+          );
+        }
+      }
+    }
+  }
+
+  showMsg('checkResultMsg','success',`체크 완료! ${totalChecked}건 확인, ${totalWins}건 5등 이상 당첨`);
+  showDashboard();
+  showGlobalStats();
+}
+
+// ============ 사용자 목록 ============
+function showUserList(){
+  let el = document.getElementById('userList');
+  if(allUsers.length===0){
+    el.innerHTML='<p style="color:#666;font-size:12px;padding:16px;text-align:center">등록된 사용자 없음</p>';
+    return;
+  }
+  let html='';
+  allUsers.forEach(user=>{
+    let nums = allUserNumbers[user.uid] || [];
+    let winCount = nums.filter(n=>n.result && n.result.matchCount>=3).length;
+    html+=`<div class="user-item">
+      <div class="user-name">👤 ${user.name||user.email||'이름없음'}</div>
+      <div class="user-meta">
+        UID: ${user.uid.substring(0,12)}... · ${user.provider||'-'} · 가입: ${(user.createdAt||'').substring(0,10)}<br>
+        저장 번호: ${nums.length}개 · 당첨: ${winCount}건
+      </div>
+      <button class="btn btn-blue btn-sm" style="margin-top:6px" onclick="showUserDetail('${user.uid}')">🔎 상세보기</button>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function filterUsers(){
+  let keyword = document.getElementById('userSearch').value.toLowerCase();
+  let el = document.getElementById('userList');
+  let filtered = allUsers.filter(u=>{
+    let name = (u.name||u.email||'').toLowerCase();
+    return name.includes(keyword);
+  });
+  let html='';
+  filtered.forEach(user=>{
+    let nums = allUserNumbers[user.uid] || [];
+    let winCount = nums.filter(n=>n.result && n.result.matchCount>=3).length;
+    html+=`<div class="user-item">
+      <div class="user-name">👤 ${user.name||user.email||'이름없음'}</div>
+      <div class="user-meta">
+        UID: ${user.uid.substring(0,12)}... · ${user.provider||'-'} · 저장: ${nums.length}개 · 당첨: ${winCount}건
+      </div>
+      <button class="btn btn-blue btn-sm" style="margin-top:6px" onclick="showUserDetail('${user.uid}')">🔎 상세보기</button>
+    </div>`;
+  });
+  if(filtered.length===0) html='<p style="color:#666;font-size:12px;text-align:center;padding:12px">검색 결과 없음</p>';
+  el.innerHTML = html;
+}
+
+// ============ 사용자 상세보기 ============
+function showUserDetail(uid){
+  // 섹션 열기
+  let body = document.getElementById('userDetailBody');
+  if(!body.classList.contains('open')){
+    body.classList.add('open');
+  }
+
+  let user = allUsers.find(u=>u.uid===uid);
+  let nums = allUserNumbers[uid] || [];
+  let el = document.getElementById('userDetail');
+
+  let html = `<div style="background:#1a1a2e;border-radius:10px;padding:12px;margin-bottom:8px">
+    <div style="font-size:14px;font-weight:700;color:#a78bfa">👤 ${user?.name||user?.email||'이름없음'}</div>
+    <div style="font-size:11px;color:#888;margin-top:4px">
+      UID: ${uid}<br>
+      가입 방법: ${user?.provider||'-'}<br>
+      가입일: ${user?.createdAt||'-'}<br>
+      마지막 로그인: ${user?.lastLogin||'-'}<br>
+      총 저장 번호: ${nums.length}개
+    </div>
+  </div>`;
+
+  if(nums.length===0){
+    html+='<p style="color:#666;font-size:12px;text-align:center;padding:12px">저장된 번호 없음</p>';
+  } else {
+    nums.forEach(entry=>{
+      let matchInfo = '';
+      if(entry.result){
+        let mc = entry.result.matchCount;
+        let label = mc>=6?'🏆1등':mc===5?'🎉3등':mc===4?'🎊4등':'5등';
+        matchInfo = `<div style="color:#34d399;margin-top:4px">✅ ${entry.result.round}회 ${label} (${mc}개 일치) [${(entry.result.matchedNumbers||[]).join(',')}]</div>`;
+      }
+      html+=`<div class="user-num-row">
+        <div style="color:#888">${entry.date||'-'} ${entry.time||''} · ${entry.grade||'-'}등급 · 대상 ${entry.targetRound||'?'}회</div>
+        <div style="margin-top:4px">${entry.numbers.map(n=>ballHTML(n)).join('')}</div>
+        <div style="color:#666;font-size:10px;margin-top:2px">${entry.patternKey||''}</div>
+        ${matchInfo}
+      </div>`;
+    });
+  }
+
+  el.innerHTML = html;
+  el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ============ 전체 통계 ============
+function showGlobalStats(){
+  let el = document.getElementById('globalStats');
+  let gradeCount = {S:0, A:0, B:0, C:0, D:0};
+  let totalNums = 0;
+  let winsByGrade = {S:0, A:0, B:0, C:0, D:0};
+  let popularNumbers = {};
+
+  Object.values(allUserNumbers).forEach(nums=>{
+    nums.forEach(entry=>{
+      totalNums++;
+      let g = entry.grade || 'D';
+      gradeCount[g] = (gradeCount[g]||0) + 1;
+      if(entry.result && entry.result.matchCount>=3){
+        winsByGrade[g] = (winsByGrade[g]||0) + 1;
+      }
+      entry.numbers.forEach(n=>{
+        popularNumbers[n] = (popularNumbers[n]||0) + 1;
+      });
+    });
+  });
+
+  // 인기 번호 TOP 10
+  let popSorted = Object.entries(popularNumbers).sort((a,b)=>b[1]-a[1]).slice(0,10);
+
+  let html = `<div style="margin-bottom:12px">
+    <div style="font-size:13px;font-weight:700;margin-bottom:8px">등급별 저장 & 적중률</div>
+    <table class="data-table">
+      <tr><th>등급</th><th>저장 수</th><th>5등이상</th><th>적중률</th></tr>
+      ${['S','A','B','C','D'].map(g=>{
+        let total = gradeCount[g]||0;
+        let wins = winsByGrade[g]||0;
+        let rate = total>0 ? ((wins/total)*100).toFixed(1) : '0.0';
+        return `<tr><td style="font-weight:700">${g}</td><td>${total}</td><td>${wins}</td><td>${rate}%</td></tr>`;
+      }).join('')}
+    </table>
+  </div>`;
+
+  html += `<div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:8px">사용자 인기 번호 TOP 10</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      ${popSorted.map(([num, count],i)=>`<div style="text-align:center">
+        ${ballHTML(parseInt(num))}
+        <div style="font-size:10px;color:#888">${count}회</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+
+  if(popSorted.length===0) html+='<p style="color:#666;font-size:12px;text-align:center;padding:12px">아직 데이터 없음</p>';
+  el.innerHTML = html;
+}
+
+// ============ 데이터 백업 ============
+function backupDraws(){
+  let data = JSON.stringify(allData, null, 2);
+  downloadFile('lotto_draws_backup.json', data);
+  showToast('당첨번호 백업 완료');
+}
+
+function backupUsers(){
+  let data = {
+    users: allUsers,
+    userNumbers: allUserNumbers,
+    exportedAt: new Date().toISOString()
+  };
+  downloadFile('lotto_users_backup.json', JSON.stringify(data, null, 2));
+  showToast('사용자 데이터 백업 완료');
+}
+
+function downloadFile(filename, content){
+  let blob = new Blob([content], {type:'application/json'});
+  let url = URL.createObjectURL(blob);
+  let a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ============ 볼 HTML ============
+function getBallClass(n){
+  if(n<=10) return 'b1';
+  if(n<=20) return 'b2';
+  if(n<=30) return 'b3';
+  if(n<=40) return 'b4';
+  return 'b5';
+}
+function ballHTML(n, extra=''){
+  return `<span class="ball ${getBallClass(n)} ${extra}">${n}</span>`;
+}
+
+// ============ 접기/펼치기 ============
+function toggleSection(id, titleEl){
+  let el = document.getElementById(id);
+  el.classList.toggle('open');
+  if(titleEl) titleEl.classList.toggle('open');
+}
+
+// ============ 토스트 ============
+function showToast(msg){
+  let t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+// ============ 전체 새로고침 ============
+function refreshAdminAll(){
+  showDashboard();
+  showDrawList();
+  showUserList();
+  showGlobalStats();
+  autoFillRound();
+}
+</script>
+</body>
+</html>

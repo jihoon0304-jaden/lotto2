@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AI 로또 분석기</title>
+<script src="lotto_data.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Malgun Gothic',sans-serif;background:#0a0a1a;color:#eee;min-height:100vh;padding-bottom:80px}
+.container{max-width:500px;margin:0 auto;padding:12px}
+.header{text-align:center;padding:20px 0 10px;position:relative}
+.header h1{font-size:24px;color:#fff}
+.header h1 span{background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header .sub{color:#888;font-size:12px;margin-top:4px}
+.user-bar{display:flex;justify-content:space-between;align-items:center;background:#1a1a2e;border-radius:12px;padding:10px 14px;margin-bottom:12px}
+.user-bar .name{font-size:13px;color:#a78bfa}
+.user-bar .logout-btn{background:#ef4444;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer}
+.login-prompt{text-align:center;padding:16px;background:#1a1a2e;border-radius:12px;margin-bottom:12px}
+.login-prompt p{color:#888;font-size:13px;margin-bottom:12px}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center}
+.modal-overlay.show{display:flex}
+.modal{background:#1a1a2e;border-radius:16px;padding:24px;width:90%;max-width:360px;text-align:center;position:relative}
+.modal h2{color:#fff;font-size:18px;margin-bottom:16px}
+.modal-close{position:absolute;top:12px;right:16px;color:#888;font-size:20px;cursor:pointer;background:none;border:none}
+.login-btn{width:100%;padding:12px;border-radius:10px;border:none;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-kakao{background:#FEE500;color:#000}
+.btn-google{background:#fff;color:#333}
+.btn-email-toggle{background:#374151;color:#fff}
+.email-form{display:none;margin-top:12px}
+.email-form.show{display:block}
+.email-form input{width:100%;padding:10px;border-radius:8px;border:1px solid #333;background:#0a0a1a;color:#eee;margin-bottom:8px;font-size:13px}
+.email-form .btn-row{display:flex;gap:8px}
+.email-form .btn-row button{flex:1;padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer}
+.btn-login-submit{background:#667eea;color:#fff}
+.btn-signup-submit{background:#10b981;color:#fff}
+.card{background:#12122a;border:1px solid #1e1e3a;border-radius:16px;padding:16px;margin-bottom:12px}
+.card-title{font-size:15px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.card-title .icon{font-size:18px}
+.card-title.collapsible{cursor:pointer;user-select:none}
+.card-title.collapsible::after{content:'▼';margin-left:auto;font-size:10px;color:#666;transition:transform 0.3s}
+.card-title.collapsible.open::after{transform:rotate(180deg)}
+.collapse-body{max-height:0;overflow:hidden;transition:max-height 0.4s ease}
+.collapse-body.open{max-height:5000px}
+.ball{display:inline-flex;width:36px;height:36px;border-radius:50%;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;margin:2px}
+.ball.b1{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
+.ball.b2{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+.ball.b3{background:linear-gradient(135deg,#f87171,#ef4444)}
+.ball.b4{background:linear-gradient(135deg,#888,#555)}
+.ball.b5{background:linear-gradient(135deg,#34d399,#10b981)}
+.ball.bonus{background:linear-gradient(135deg,#c084fc,#a855f7)}
+.draw-row{margin-bottom:10px;padding:10px;background:#1a1a2e;border-radius:10px}
+.draw-round{font-size:12px;color:#888;margin-bottom:4px}
+.draw-balls{display:flex;flex-wrap:wrap;align-items:center;gap:2px}
+.draw-grade{display:inline-block;font-size:10px;padding:2px 8px;border-radius:6px;margin-left:8px;font-weight:700}
+.grade-S{background:#fbbf24;color:#000}
+.grade-A{background:#f87171;color:#fff}
+.grade-B{background:#60a5fa;color:#fff}
+.grade-C{background:#34d399;color:#000}
+.grade-D{background:#555;color:#fff}
+.scoreboard{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.score-item{background:#1a1a2e;border-radius:10px;padding:12px;text-align:center}
+.score-num{font-size:22px;font-weight:800;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.score-label{font-size:11px;color:#888;margin-top:2px}
+.ai-top-card{background:linear-gradient(135deg,#667eea,#764ba2,#ef4444);padding:2px;border-radius:16px;margin-bottom:12px;animation:aiGlow 3s ease-in-out infinite}
+@keyframes aiGlow{0%,100%{box-shadow:0 0 15px rgba(102,126,234,0.4)}50%{box-shadow:0 0 30px rgba(168,85,247,0.6)}}
+.ai-top-inner{background:#12122a;border-radius:14px;padding:16px;text-align:center}
+.ai-top-inner h3{font-size:16px;margin-bottom:4px;color:#fff}
+.ai-top-inner .ai-reason{font-size:11px;color:#a78bfa;margin-bottom:10px;line-height:1.5}
+.ai-top-inner .ai-btn{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;padding:14px 24px;font-size:15px;font-weight:700;cursor:pointer;width:100%;margin-top:8px}
+.pattern-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pattern-card{background:#1a1a2e;border:1px solid #2a2a4a;border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:all 0.2s}
+.pattern-card:hover{border-color:#667eea;transform:translateY(-2px)}
+.pattern-card .grade{font-size:20px;font-weight:800}
+.pattern-card .desc{font-size:10px;color:#888;margin-top:4px}
+.pattern-card .count{font-size:11px;color:#667eea;margin-top:4px}
+.result-card{background:#1a1a2e;border-radius:12px;padding:16px;margin-top:12px;border:1px solid #2a2a4a}
+.result-title{font-size:13px;color:#888;margin-bottom:8px}
+.result-balls{display:flex;justify-content:center;gap:4px;margin-bottom:12px}
+.result-balls .ball{width:42px;height:42px;font-size:16px}
+.result-badge{display:inline-block;font-size:10px;padding:3px 10px;border-radius:6px;margin:2px;background:#1e1e3a;color:#aaa}
+.result-badge.green{background:#064e3b;color:#34d399}
+.result-proof{margin-top:12px}
+.proof-item{background:#0a0a1a;border-radius:8px;padding:10px;margin-bottom:6px;font-size:12px}
+.proof-round{color:#667eea;font-weight:700}
+.proof-match{color:#fbbf24}
+.result-actions{display:flex;gap:8px;margin-top:12px}
+.btn{padding:10px 16px;border-radius:10px;border:none;font-weight:700;cursor:pointer;font-size:13px;flex:1;text-align:center}
+.btn-save{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+.btn-retry{background:#1e1e3a;color:#aaa}
+.saved-item{background:#1a1a2e;border-radius:10px;padding:12px;margin-bottom:8px;position:relative}
+.saved-meta{font-size:11px;color:#888;margin-bottom:6px}
+.saved-balls{display:flex;flex-wrap:wrap;gap:2px;margin-bottom:6px}
+.saved-grade-tag{font-size:10px;padding:2px 8px;border-radius:6px;font-weight:700}
+.saved-delete{position:absolute;top:10px;right:10px;background:#ef4444;color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer}
+.saved-toggle{text-align:center;padding:8px;color:#667eea;font-size:12px;cursor:pointer}
+.match-alert{background:linear-gradient(135deg,#064e3b,#065f46);border:1px solid #10b981;border-radius:12px;padding:14px;margin-bottom:12px}
+.match-alert .title{color:#34d399;font-weight:700;font-size:14px;margin-bottom:6px}
+.match-alert .detail{font-size:12px;color:#a7f3d0}
+.hot-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
+.hot-num{text-align:center;padding:6px 2px;border-radius:8px;font-size:12px;font-weight:700}
+.hot-num.hot{background:#7f1d1d;color:#fca5a5}
+.hot-num.warm{background:#78350f;color:#fcd34d}
+.hot-num.cool{background:#1e3a5f;color:#93c5fd}
+.recent-table{width:100%;font-size:11px;border-collapse:collapse}
+.recent-table th{color:#888;padding:6px 4px;border-bottom:1px solid #1e1e3a;text-align:left}
+.recent-table td{padding:6px 4px;border-bottom:1px solid #0a0a1a}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 24px;border-radius:10px;font-size:13px;display:none;z-index:9999}
+.toast.show{display:block;animation:fadeInOut 2s ease}
+@keyframes fadeInOut{0%{opacity:0}15%{opacity:1}85%{opacity:1}100%{opacity:0}}
+.sync-bar{text-align:center;font-size:11px;color:#888;margin-bottom:8px}
+.footer{text-align:center;color:#555;font-size:11px;padding:20px 0;line-height:1.6}
+.loading{text-align:center;padding:20px;color:#888;font-size:13px}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>🎱 <span>AI</span> 로또 분석기</h1>
+    <div class="sub">과거 당첨 패턴 기반 AI 분석 추천</div>
+  </div>
+
+  <div id="userBar" style="display:none" class="user-bar">
+    <span class="name" id="userName"></span>
+    <button class="logout-btn" onclick="doLogout()">로그아웃</button>
+  </div>
+
+  <div id="loginPrompt" class="login-prompt">
+    <p>로그인하면 번호 저장 및 당첨 확인이 가능합니다</p>
+    <button class="login-btn btn-kakao" onclick="openLoginModal()" style="width:auto;display:inline-flex;padding:10px 20px">🔑 로그인 / 회원가입</button>
+  </div>
+
+  <div id="loginModal" class="modal-overlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeLoginModal()">✕</button>
+      <h2>로그인</h2>
+      <button class="login-btn btn-kakao" onclick="kakaoLogin()">💬 카카오로 시작하기</button>
+      <button class="login-btn btn-google" onclick="googleLogin()">G Google로 시작하기</button>
+      <button class="login-btn btn-email-toggle" onclick="toggleEmailForm()">✉️ 이메일로 시작하기</button>
+      <div id="emailForm" class="email-form">
+        <input type="email" id="emailInput" placeholder="이메일 주소">
+        <input type="password" id="pwInput" placeholder="비밀번호 (6자 이상)">
+        <div class="btn-row">
+          <button class="btn-login-submit" onclick="emailLogin()">로그인</button>
+          <button class="btn-signup-submit" onclick="emailSignup()">회원가입</button>
+        </div>
+      </div>
+      <p id="loginMsg" style="color:#ef4444;font-size:12px;margin-top:8px"></p>
+    </div>
+  </div>
+
+  <div id="syncStatus" class="sync-bar">⏳ 데이터 로딩중...</div>
+  <div id="matchAlert"></div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🏆</span> 최근 당첨번호</div>
+    <div id="lastDraws"><div class="loading">로딩중...</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📊</span> AI 분석기 성적표</div>
+    <div id="scoreboard" class="scoreboard"></div>
+  </div>
+
+  <div id="aiTopCard"></div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🎯</span> 등급별 패턴 선택</div>
+    <p style="color:#666;font-size:11px;margin-bottom:10px">원하는 등급을 선택하면 해당 패턴의 번호를 생성합니다</p>
+    <div id="patternSelect" class="pattern-grid"></div>
+  </div>
+
+  <div id="recommendResult"></div>
+
+  <div class="card">
+    <div class="card-title collapsible" onclick="toggleSection('myNumBody',this)"><span class="icon">💾</span> 내 저장 번호</div>
+    <div id="myNumBody" class="collapse-body open">
+      <div id="myNumbers"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title collapsible" onclick="toggleSection('patternAnalBody',this)"><span class="icon">🧬</span> 역대 1등 당첨 패턴 분석 TOP 10</div>
+    <div id="patternAnalBody" class="collapse-body">
+      <div id="patternAnalysis"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title collapsible" onclick="toggleSection('hotBody',this)"><span class="icon">🔥</span> 핫넘버 (최근 100회)</div>
+    <div id="hotBody" class="collapse-body">
+      <div id="hotNumbers"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title collapsible" onclick="toggleSection('recentBody',this)"><span class="icon">📋</span> 최근 20회 당첨번호</div>
+    <div id="recentBody" class="collapse-body">
+      <div id="recentData"></div>
+    </div>
+  </div>
+
+  <div class="footer">AI 로또 분석기 v5.0<br>과거 데이터 패턴 기반 분석 · 당첨을 보장하지 않습니다</div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// ============ 전역 변수 ============
+let allData = [];
+let patternRanking = [];
+let myNumbers = [];
+let currentUserInfo = null;
+let showAllSaved = false;
+let aiTargetGrade = 'S';
+let aiReason = '';
+let firebaseLoaded = false;
+
+// ============ Firebase 동적 로드 ============
+async function loadFirebase(){
+  try {
+    const {initializeApp} = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js");
+    const {getFirestore, collection, doc, setDoc, getDocs, deleteDoc, getDoc} = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js");
+    const {getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged} = await import("https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js");
+
+    const firebaseConfig = {
+      apiKey:"AIzaSyBdLvfI1ItgRLtGs1qFLBMjZIn3tPaI3Nw",
+      authDomain:"lottl-jihoon.firebaseapp.com",
+      projectId:"lottl-jihoon",
+      storageBucket:"lottl-jihoon.firebasestorage.app",
+      messagingSenderId:"814020270032",
+      appId:"1:814020270032:web:e4895c727d7d1e00ed0bd5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    window.fb = {db, auth, collection, doc, setDoc, getDocs, deleteDoc, getDoc, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged};
+    window.fb.googleProvider = new GoogleAuthProvider();
+
+    firebaseLoaded = true;
+    console.log('✅ Firebase 로드 성공');
+
+    // 인증 상태 감시
+    onAuthStateChanged(auth, (user) => {
+      if(user){
+        onLoginSuccess(user.displayName || user.email, user.uid, 'firebase');
+      }
+    });
+
+    // 데이터 동기화
+    loadFromFirebase();
+
+  } catch(e){
+    console.log('⚠️ Firebase 로드 실패 (오프라인 모드):', e.message);
+    document.getElementById('syncStatus').textContent='⚠️ 오프라인 모드 (로컬 데이터만 사용)';
+  }
+}
+
+// ============ 카카오 로드 ============
+let kakaoLoaded = false;
+function loadKakaoSDK(){
+  let script = document.createElement('script');
+  script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+  script.onload = function(){
+    Kakao.init('cbf6c2079920d42b51dd97f2a4ea2d65');
+    kakaoLoaded = true;
+    console.log('✅ 카카오 SDK 로드 성공');
+  };
+  script.onerror = function(){
+    console.log('⚠️ 카카오 SDK 로드 실패');
+  };
+  document.head.appendChild(script);
+}
+
+// ============ 로그인/로그아웃 ============
+function openLoginModal(){
+  document.getElementById('loginModal').classList.add('show');
+}
+function closeLoginModal(){
+  document.getElementById('loginModal').classList.remove('show');
+  document.getElementById('loginMsg').textContent='';
+}
+function toggleEmailForm(){
+  document.getElementById('emailForm').classList.toggle('show');
+}
+
+function kakaoLogin(){
+  if(!kakaoLoaded){
+    document.getElementById('loginMsg').textContent='카카오 SDK 로딩중... 잠시 후 다시 시도해주세요';
+    return;
+  }
+  Kakao.Auth.login({
+    success: function(authObj){
+      Kakao.API.request({
+        url:'/v2/user/me',
+        success: function(res){
+          let name = res.properties?.nickname || '카카오사용자';
+          let uid = 'kakao_' + res.id;
+          closeLoginModal();
+          onLoginSuccess(name, uid, 'kakao');
+          if(firebaseLoaded){
+            window.fb.setDoc(window.fb.doc(window.fb.db,'users',uid),{
+              name, provider:'kakao', createdAt:new Date().toISOString(), lastLogin:new Date().toISOString()
+            },{merge:true});
+          }
+        },
+        fail: function(){ document.getElementById('loginMsg').textContent='카카오 로그인 실패'; }
+      });
+    },
+    fail: function(){ document.getElementById('loginMsg').textContent='카카오 로그인 실패 (file:// 에서는 작동하지 않습니다)'; }
+  });
+}
+
+function googleLogin(){
+  if(!firebaseLoaded){
+    document.getElementById('loginMsg').textContent='Firebase 로딩중... 잠시 후 다시 시도해주세요';
+    return;
+  }
+  window.fb.signInWithPopup(window.fb.auth, window.fb.googleProvider).then(result=>{
+    let user = result.user;
+    window.fb.setDoc(window.fb.doc(window.fb.db,'users',user.uid),{
+      name:user.displayName, email:user.email, provider:'google',
+      createdAt:new Date().toISOString(), lastLogin:new Date().toISOString()
+    },{merge:true});
+  }).catch(err=>{
+    document.getElementById('loginMsg').textContent='Google 로그인 실패: '+err.message;
+  });
+}
+
+function emailLogin(){
+  if(!firebaseLoaded){
+    document.getElementById('loginMsg').textContent='Firebase 로딩중... 잠시 후 다시 시도해주세요';
+    return;
+  }
+  let email = document.getElementById('emailInput').value;
+  let pw = document.getElementById('pwInput').value;
+  if(!email||!pw){document.getElementById('loginMsg').textContent='이메일과 비밀번호를 입력하세요';return;}
+  window.fb.signInWithEmailAndPassword(window.fb.auth, email, pw).then(result=>{
+    // onAuthStateChanged가 처리
+  }).catch(err=>{
+    document.getElementById('loginMsg').textContent='로그인 실패: 이메일 또는 비밀번호를 확인하세요';
+  });
+}
+
+function emailSignup(){
+  if(!firebaseLoaded){
+    document.getElementById('loginMsg').textContent='Firebase 로딩중... 잠시 후 다시 시도해주세요';
+    return;
+  }
+  let email = document.getElementById('emailInput').value;
+  let pw = document.getElementById('pwInput').value;
+  if(!email||!pw){document.getElementById('loginMsg').textContent='이메일과 비밀번호를 입력하세요';return;}
+  if(pw.length<6){document.getElementById('loginMsg').textContent='비밀번호는 6자 이상이어야 합니다';return;}
+  window.fb.createUserWithEmailAndPassword(window.fb.auth, email, pw).then(result=>{
+    let user = result.user;
+    window.fb.setDoc(window.fb.doc(window.fb.db,'users',user.uid),{
+      email:user.email, provider:'email',
+      createdAt:new Date().toISOString(), lastLogin:new Date().toISOString()
+    },{merge:true});
+  }).catch(err=>{
+    let msg = '가입 실패';
+    if(err.code==='auth/email-already-in-use') msg='이미 가입된 이메일입니다';
+    else if(err.code==='auth/invalid-email') msg='올바른 이메일 형식이 아닙니다';
+    document.getElementById('loginMsg').textContent=msg;
+  });
+}
+
+function doLogout(){
+  if(currentUserInfo && currentUserInfo.provider === 'kakao' && kakaoLoaded){
+    try{ Kakao.Auth.logout(function(){}); }catch(e){}
+  }
+  if(firebaseLoaded){
+    try{ window.fb.signOut(window.fb.auth); }catch(e){}
+  }
+  currentUserInfo = null;
+  myNumbers = [];
+  document.getElementById('userBar').style.display='none';
+  document.getElementById('loginPrompt').style.display='block';
+  showMyNumbers();
+  showScoreboard();
+  showToast('로그아웃 되었습니다');
+}
+
+function onLoginSuccess(name, uid, provider){
+  currentUserInfo = {name, uid, provider};
+  document.getElementById('userBar').style.display='flex';
+  document.getElementById('userName').textContent='👤 ' + name + ' 님';
+  document.getElementById('loginPrompt').style.display='none';
+  closeLoginModal();
+  loadMyNumbersFromFirebase();
+  showToast(name + ' 님 환영합니다!');
+}
+
+// ============ 데이터 초기화 ============
+function initData(){
+  allData = [];
+  if(typeof LOTTO_DATA !== 'undefined' && Array.isArray(LOTTO_DATA)){
+    allData = LOTTO_DATA.slice();
+  }
+  let extra = [];
+  try{ extra = JSON.parse(localStorage.getItem('extraDraws')||'[]'); }catch(e){}
+  extra.forEach(e=>{
+    if(!allData.find(d=>d.round===e.round)) allData.push(e);
+  });
+  allData.sort((a,b)=>a.round-b.round);
+  console.log('✅ 로컬 데이터 로드:', allData.length, '회');
+}
+
+// ============ Firebase 데이터 로드 ============
+async function loadFromFirebase(){
+  if(!firebaseLoaded) return;
+  try{
+    let snap = await window.fb.getDocs(window.fb.collection(window.fb.db,'draws'));
+    let count=0;
+    snap.forEach(docSnap=>{
+      let d = docSnap.data();
+      if(!allData.find(x=>x.round===d.round)){
+        allData.push(d);
+        count++;
+      }
+    });
+    if(count>0){
+      allData.sort((a,b)=>a.round-b.round);
+      analyzeAllWinningPatterns();
+      refreshAll();
+    }
+    document.getElementById('syncStatus').textContent='✅ 데이터 동기화 완료 (총 '+allData.length+'회)';
+  }catch(e){
+    console.log('Firebase 데이터 로드 실패:', e.message);
+    document.getElementById('syncStatus').textContent='⚠️ 동기화 실패 (로컬 데이터 사용중)';
+  }
+}
+
+async function loadMyNumbersFromFirebase(){
+  if(!firebaseLoaded || !currentUserInfo) return;
+  try{
+    let uid = currentUserInfo.uid;
+    let snap = await window.fb.getDocs(window.fb.collection(window.fb.db,'users',uid,'numbers'));
+    myNumbers=[];
+    snap.forEach(docSnap=>{ myNumbers.push(docSnap.data()); });
+    myNumbers.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+    showMyNumbers();
+    showScoreboard();
+    checkMyMatches();
+  }catch(e){
+    console.log('내 번호 로드 실패:', e.message);
+  }
+}
+
+// ============ 볼 색상 ============
+function getBallClass(n){
+  if(n<=10) return 'b1';
+  if(n<=20) return 'b2';
+  if(n<=30) return 'b3';
+  if(n<=40) return 'b4';
+  return 'b5';
+}
+function ballHTML(n, extra){
+  return '<span class="ball '+getBallClass(n)+(extra?' '+extra:'')+'">' +n+'</span>';
+}
+
+// ============ 패턴 분석 엔진 ============
+function analyzeAllWinningPatterns(){
+  let patternMap = {};
+  for(let i=1; i<allData.length; i++){
+    let current = allData[i].numbers.slice().sort((a,b)=>a-b);
+    let m3=0, m4=0, m5=0;
+    for(let j=0; j<i; j++){
+      let past = allData[j].numbers.slice().sort((a,b)=>a-b);
+      let match = current.filter(n=>past.includes(n)).length;
+      if(match===3) m3++;
+      if(match===4) m4++;
+      if(match>=5) m5++;
+    }
+    let key = groupKey(m3,m4,m5);
+    if(!patternMap[key]){
+      patternMap[key]={key, count:0, rounds:[], m3Total:0, m4Total:0, m5Total:0};
+    }
+    patternMap[key].count++;
+    patternMap[key].rounds.push(allData[i].round);
+    patternMap[key].m3Total += m3;
+    patternMap[key].m4Total += m4;
+    patternMap[key].m5Total += m5;
+  }
+  let patterns = Object.values(patternMap);
+  patterns.forEach(p=>{
+    p.m3Avg = (p.m3Total/p.count).toFixed(1);
+    p.m4Avg = (p.m4Total/p.count).toFixed(1);
+    p.m5Avg = (p.m5Total/p.count).toFixed(1);
+  });
+  patterns.sort((a,b)=>b.count-a.count);
+  let total = patterns.length;
+  patterns.forEach((p,i)=>{
+    let pct = i/total;
+    if(pct<0.15) p.grade='S';
+    else if(pct<0.35) p.grade='A';
+    else if(pct<0.60) p.grade='B';
+    else if(pct<0.85) p.grade='C';
+    else p.grade='D';
+  });
+  patternRanking = patterns;
+}
+
+function groupKey(m3,m4,m5){
+  return '5등'+groupRange(m3,[0,1,3,5,10,999])+'_4등'+groupRange(m4,[0,1,2,3,5,999])+'_3등'+groupRange(m5,[0,1,2,999]);
+}
+function groupRange(val, ranges){
+  for(let i=0;i<ranges.length-1;i++){
+    if(val>=ranges[i] && val<ranges[i+1]){
+      if(ranges[i+1]===999) return ranges[i]+'+';
+      return ranges[i]+'-'+(ranges[i+1]-1);
+    }
+  }
+  return val+'';
+}
+
+// ============ AI 최적 패턴 결정 ============
+function decideAITarget(){
+  if(allData.length<11){aiTargetGrade='S';aiReason='데이터 분석중...';return;}
+  let recent10 = allData.slice(-10);
+  let gradeCount = {S:0, A:0, B:0, C:0};
+  recent10.forEach(draw=>{
+    let nums = draw.numbers.slice().sort((a,b)=>a-b);
+    let m3=0, m4=0, m5=0;
+    for(let j=0;j<allData.length;j++){
+      if(allData[j].round >= draw.round) break;
+      let past = allData[j].numbers.slice().sort((a,b)=>a-b);
+      let match = nums.filter(n=>past.includes(n)).length;
+      if(match===3) m3++;
+      if(match===4) m4++;
+      if(match>=5) m5++;
+    }
+    let key = groupKey(m3,m4,m5);
+    let found = patternRanking.find(p=>p.key===key);
+    if(found && gradeCount.hasOwnProperty(found.grade)) gradeCount[found.grade]++;
+  });
+  let minGrade='S', minCount=999;
+  ['S','A','B','C'].forEach(g=>{
+    if(gradeCount[g]<minCount){minCount=gradeCount[g];minGrade=g;}
+  });
+  aiTargetGrade = minGrade;
+  aiReason = '최근 10회 1등 분석: S('+gradeCount.S+'회) A('+gradeCount.A+'회) B('+gradeCount.B+'회) C('+gradeCount.C+'회) → '+minGrade+'등급이 '+minCount+'회로 가장 적음 → 이번 주 '+minGrade+'등급 추천';
+}
+
+// ============ 최근 3회 당첨번호 ============
+function showLastDraws(){
+  let el = document.getElementById('lastDraws');
+  if(allData.length===0){el.innerHTML='<div class="loading">데이터 없음</div>';return;}
+  let last3 = allData.slice(-3).reverse();
+  let html='';
+  last3.forEach(draw=>{
+    let nums = draw.numbers.slice().sort((a,b)=>a-b);
+    let m3=0, m4=0, m5=0;
+    let idx = allData.findIndex(d=>d.round===draw.round);
+    for(let j=0;j<idx;j++){
+      let past = allData[j].numbers.slice().sort((a,b)=>a-b);
+      let match = nums.filter(n=>past.includes(n)).length;
+      if(match===3) m3++;
+      if(match===4) m4++;
+      if(match>=5) m5++;
+    }
+    let key = groupKey(m3,m4,m5);
+    let found = patternRanking.find(p=>p.key===key);
+    let grade = found ? found.grade : '-';
+    html+='<div class="draw-row"><div class="draw-round">'+draw.round+'회 <span class="draw-grade grade-'+grade+'">'+grade+'등급</span> <span style="font-size:10px;color:#888;margin-left:4px">5등'+m3+'회 4등'+m4+'회 3등'+m5+'회</span></div><div class="draw-balls">'+nums.map(n=>ballHTML(n)).join('')+(draw.bonus?' <span style="color:#888;margin:0 4px">+</span>'+ballHTML(draw.bonus,'bonus'):'')+'</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+// ============ 성적표 ============
+function showScoreboard(){
+  let totalSaved=0, match3=0, match4=0, match5=0;
+  myNumbers.forEach(entry=>{
+    totalSaved++;
+    if(entry.result){
+      if(entry.result.matchCount===3) match3++;
+      if(entry.result.matchCount===4) match4++;
+      if(entry.result.matchCount>=5) match5++;
+    }
+  });
+  let total = match3+match4+match5;
+  let rate = totalSaved>0 ? ((total/totalSaved)*100).toFixed(1) : '0.0';
+  document.getElementById('scoreboard').innerHTML='<div class="score-item"><div class="score-num">'+totalSaved+'</div><div class="score-label">총 저장 번호</div></div><div class="score-item"><div class="score-num">'+total+'</div><div class="score-label">5등 이상 당첨</div></div><div class="score-item"><div class="score-num">'+rate+'%</div><div class="score-label">적중률</div></div><div class="score-item"><div class="score-num">'+(match4+match5)+'</div><div class="score-label">4등 이상</div></div>';
+}
+
+// ============ AI 최적 카드 ============
+function showAITopCard(){
+  decideAITarget();
+  document.getElementById('aiTopCard').innerHTML='<div class="ai-top-card"><div class="ai-top-inner"><h3>🤖 AI 이번 주 최적 패턴</h3><div class="ai-reason">'+aiReason+'</div><div style="font-size:24px;font-weight:800;color:#fbbf24;margin:8px 0">'+aiTargetGrade+' 등급</div><button class="ai-btn" onclick="selectGrade(\'AI\')">🚀 AI 최적 번호 받기</button></div></div>';
+}
+
+// ============ 등급별 선택 ============
+function showPatternSelect(){
+  let gradeInfo={};
+  patternRanking.forEach(p=>{
+    if(!gradeInfo[p.grade]) gradeInfo[p.grade]={count:0};
+    gradeInfo[p.grade].count += p.count;
+  });
+  let grades=[
+    {g:'S',emoji:'👑',desc:'최다 출현 패턴',color:'#fbbf24'},
+    {g:'A',emoji:'🔥',desc:'높은 출현율',color:'#f87171'},
+    {g:'B',emoji:'⚡',desc:'중간 출현율',color:'#60a5fa'},
+    {g:'C',emoji:'🌙',desc:'낮은 출현율',color:'#34d399'}
+  ];
+  let html='';
+  grades.forEach(info=>{
+    let gi = gradeInfo[info.g]||{count:0};
+    html+='<div class="pattern-card" onclick="selectGrade(\''+info.g+'\')"><div class="grade" style="color:'+info.color+'">'+info.emoji+' '+info.g+'</div><div class="desc">'+info.desc+'</div><div class="count">'+gi.count+'회 출현</div></div>';
+  });
+  document.getElementById('patternSelect').innerHTML = html;
+}
+
+// ============ 번호 생성 ============
+function selectGrade(grade){
+  let targetGrade = grade==='AI' ? aiTargetGrade : grade;
+  generateByGrade(targetGrade, grade==='AI');
+}
+
+function generateByGrade(targetGrade, isAI){
+  let targetPatterns = patternRanking.filter(p=>p.grade===targetGrade);
+  if(targetPatterns.length===0){showToast('해당 등급 패턴이 없습니다');return;}
+  let freq = getFrequency();
+  let best=null, bestScore=-1, bestInfo=null;
+  let attempts=0, maxAttempts=10000;
+  while(attempts<maxAttempts){
+    attempts++;
+    let nums = generateCandidate(freq);
+    if(isAlreadyWon(nums)) continue;
+    let numsSorted = nums.slice().sort((a,b)=>a-b);
+    let m3=0, m4=0, m5=0;
+    let proofs=[];
+    for(let j=0;j<allData.length;j++){
+      let past = allData[j].numbers.slice().sort((a,b)=>a-b);
+      let matched = numsSorted.filter(n=>past.includes(n));
+      if(matched.length===3){m3++;proofs.push({round:allData[j].round,prize:'5등',matched:matched.slice(),all:past});}
+      if(matched.length===4){m4++;proofs.push({round:allData[j].round,prize:'4등',matched:matched.slice(),all:past});}
+      if(matched.length>=5){m5++;proofs.push({round:allData[j].round,prize:'3등',matched:matched.slice(),all:past});}
+    }
+    let key = groupKey(m3,m4,m5);
+    let found = patternRanking.find(p=>p.key===key);
+    if(found && found.grade===targetGrade){
+      let score = found.count;
+      if(score>bestScore){bestScore=score;best=nums;bestInfo={m3,m4,m5,key,grade:found.grade,patternCount:found.count,proofs,found};}
+      if(attempts>500 && best) break;
+    }
+  }
+  if(!best){showToast('번호 생성 실패 - 다시 시도해주세요');return;}
+  showResult(best, bestInfo, isAI);
+}
+
+function generateCandidate(freq){
+  let nums=new Set();
+  let sorted=freq.slice().sort((a,b)=>b.count-a.count);
+  let hot=sorted.slice(0,15).map(x=>x.num);
+  let warm=sorted.slice(15,30).map(x=>x.num);
+  let cold=sorted.slice(30).map(x=>x.num);
+  while(nums.size<6){
+    let r=Math.random();
+    let pool;
+    if(r<0.5)pool=hot;else if(r<0.8)pool=warm;else pool=cold;
+    nums.add(pool[Math.floor(Math.random()*pool.length)]);
+  }
+  return Array.from(nums).sort((a,b)=>a-b);
+}
+
+function getFrequency(){
+  let recent=allData.slice(-100);
+  let freq=[];
+  for(let i=1;i<=45;i++){
+    freq.push({num:i, count:recent.filter(d=>d.numbers.includes(i)).length});
+  }
+  return freq;
+}
+
+function isAlreadyWon(nums){
+  let s=nums.slice().sort((a,b)=>a-b).join(',');
+  for(let i=0;i<allData.length;i++){
+    if(allData[i].numbers.slice().sort((a,b)=>a-b).join(',')===s) return true;
+  }
+  return false;
+}
+
+// ============ 결과 표시 ============
+function showResult(nums, info, isAI){
+  let numsSorted=nums.slice().sort((a,b)=>a-b);
+  let topProofs=info.proofs.sort((a,b)=>{let o={'3등':0,'4등':1,'5등':2};return(o[a.prize]||9)-(o[b.prize]||9);}).slice(0,5);
+  let proofHTML=topProofs.map(p=>{
+    let matchedStr=p.matched.map(n=>'<b style="color:#fbbf24">'+n+'</b>').join(', ');
+    return '<div class="proof-item"><span class="proof-round">'+p.round+'회</span> <span class="proof-match">'+p.prize+'</span> 당첨번호 ['+p.all.join(', ')+'] 중 일치: '+matchedStr+'</div>';
+  }).join('');
+  let gradeLabel=isAI?'🤖 AI 최적 추천':'🎯 '+info.grade+'등급 추천';
+  let html='<div class="result-card"><div class="result-title">'+gradeLabel+' ('+info.found.count+'회 출현 패턴)</div><div class="result-balls">'+numsSorted.map(n=>ballHTML(n)).join('')+'</div><div style="text-align:center;margin-bottom:8px"><span class="result-badge grade-'+info.grade+'" style="font-size:12px">'+info.grade+'등급</span><span class="result-badge">5등 '+info.m3+'회</span><span class="result-badge">4등 '+info.m4+'회</span><span class="result-badge">3등 '+info.m5+'회</span></div><span class="result-badge green">✅ 과거 1등 당첨번호와 중복 없음</span><div class="result-proof"><div style="font-size:12px;color:#888;margin-bottom:6px">📋 근거 (상위 '+topProofs.length+'건)</div>'+proofHTML+'</div><div class="result-actions"><button class="btn btn-save" onclick="saveMyNumber(['+numsSorted+'],\''+info.grade+'\',\''+info.key+'\')">💾 저장</button><button class="btn btn-retry" onclick="selectGrade(\''+(isAI?'AI':info.grade)+'\')">🔄 다시 생성</button></div></div>';
+  document.getElementById('recommendResult').innerHTML=html;
+  document.getElementById('recommendResult').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// ============ 내 번호 저장 ============
+function saveMyNumber(nums, grade, patternKey){
+  if(!currentUserInfo){openLoginModal();showToast('로그인이 필요합니다');return;}
+  let now=new Date();
+  let id='num_'+Date.now();
+  let entry={
+    id, numbers:nums, grade, patternKey,
+    date:now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0'),
+    time:String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')+':'+String(now.getSeconds()).padStart(2,'0'),
+    timestamp:Date.now(),
+    savedAtRound:allData.length>0?allData[allData.length-1].round:0,
+    targetRound:allData.length>0?allData[allData.length-1].round+1:0
+  };
+  myNumbers.unshift(entry);
+  showMyNumbers();
+  showScoreboard();
+  showToast('번호가 저장되었습니다!');
+  if(firebaseLoaded && currentUserInfo){
+    window.fb.setDoc(window.fb.doc(window.fb.db,'users',currentUserInfo.uid,'numbers',id),entry);
+  }
+}
+
+function deleteMyNumber(id){
+  if(!confirm('정말 삭제할까요?'))return;
+  myNumbers=myNumbers.filter(x=>x.id!==id);
+  showMyNumbers();showScoreboard();
+  if(firebaseLoaded && currentUserInfo){
+    window.fb.deleteDoc(window.fb.doc(window.fb.db,'users',currentUserInfo.uid,'numbers',id));
+  }
+  showToast('삭제되었습니다');
+}
+
+// ============ 내 번호 표시 ============
+function showMyNumbers(){
+  let el=document.getElementById('myNumbers');
+  if(!currentUserInfo){el.innerHTML='<p style="text-align:center;color:#666;font-size:12px;padding:16px">로그인하면 번호를 저장할 수 있습니다</p>';return;}
+  if(myNumbers.length===0){el.innerHTML='<p style="text-align:center;color:#666;font-size:12px;padding:16px">저장된 번호가 없습니다<br><span style="font-size:11px">위에서 AI 번호를 생성하고 저장해보세요!</span></p>';return;}
+  let show=showAllSaved?myNumbers:myNumbers.slice(0,3);
+  let html='';
+  show.forEach(entry=>{
+    let matchInfo='';
+    if(entry.result){
+      let mc=entry.result.matchCount;
+      let label=mc>=6?'🏆1등':mc===5?'🎉3등':mc===4?'🎊4등':'5등';
+      matchInfo='<div style="color:#34d399;font-size:11px;margin-top:4px">✅ '+entry.result.round+'회 '+label+' ('+mc+'개 일치)</div>';
+    }
+    html+='<div class="saved-item"><button class="saved-delete" onclick="deleteMyNumber(\''+entry.id+'\')">✕</button><div class="saved-meta">'+entry.date+' '+(entry.time||'')+' · '+(entry.targetRound||'?')+'회차 대상</div><div class="saved-balls">'+entry.numbers.map(n=>ballHTML(n)).join('')+'</div><span class="saved-grade-tag grade-'+(entry.grade||'D')+'">'+(entry.grade||'-')+'등급</span><span style="font-size:10px;color:#666;margin-left:4px">'+(entry.patternKey||'')+'</span>'+matchInfo+'</div>';
+  });
+  if(myNumbers.length>3){
+    if(showAllSaved){
+      html+='<div class="saved-toggle" onclick="showAllSaved=false;showMyNumbers()">▲ 접기</div>';
+    } else {
+      html+='<div class="saved-toggle" onclick="showAllSaved=true;showMyNumbers()">▼ 전체 보기 ('+(myNumbers.length-3)+'개 더)</div>';
+    }
+  }
+  el.innerHTML=html;
+}
+
+// ============ 당첨 확인 ============
+function checkMyMatches(){
+  if(myNumbers.length===0||allData.length===0) return;
+  let alertHTML='';
+  myNumbers.forEach(entry=>{
+    if(entry.result) return;
+    let target=entry.targetRound;
+    let draw=allData.find(d=>d.round===target);
+    if(!draw) return;
+    let myNums=entry.numbers.slice().sort((a,b)=>a-b);
+    let drawNums=draw.numbers.slice().sort((a,b)=>a-b);
+    let matched=myNums.filter(n=>drawNums.includes(n));
+    if(matched.length>=3){
+      entry.result={round:draw.round,matchCount:matched.length,matchedNumbers:matched,checkedAt:new Date().toISOString()};
+      let prizeLabel=matched.length>=6?'🏆 1등!!':matched.length===5?'🎉 3등!':matched.length===4?'🎊 4등!':'5등';
+      alertHTML+='<div class="match-alert"><div class="title">'+prizeLabel+' 당첨!</div><div class="detail">'+entry.date+' 저장 번호 ['+myNums.join(', ')+']<br>'+draw.round+'회 당첨번호 ['+drawNums.join(', ')+']<br>일치: '+matched.join(', ')+' ('+matched.length+'개)<br>패턴: '+entry.grade+'등급 / '+entry.patternKey+'</div></div>';
+      if(firebaseLoaded && currentUserInfo){
+        window.fb.setDoc(window.fb.doc(window.fb.db,'users',currentUserInfo.uid,'numbers',entry.id),entry,{merge:true});
+      }
+    }
+  });
+  document.getElementById('matchAlert').innerHTML=alertHTML;
+  showMyNumbers();
+  showScoreboard();
+}
+
+// ============ 패턴 분석 TOP 10 ============
+function showPatternAnalysis(){
+  let el=document.getElementById('patternAnalysis');
+  if(patternRanking.length===0){el.innerHTML='<div class="loading">분석 데이터 없음</div>';return;}
+  let top10=patternRanking.slice(0,10);
+  let html='<div style="font-size:11px;color:#888;margin-bottom:8px">패턴 = 생성번호가 과거 당첨번호와 몇회 일치하는지의 분포</div>';
+  top10.forEach((p,i)=>{
+    let lastRounds=p.rounds.slice(-3).join(', ');
+    html+='<div style="background:#1a1a2e;border-radius:8px;padding:10px;margin-bottom:6px"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:700">'+(i+1)+'위 <span class="draw-grade grade-'+p.grade+'">'+p.grade+'</span></span><span style="font-size:11px;color:#667eea">'+p.count+'회 출현</span></div><div style="font-size:11px;color:#aaa;margin-top:4px">'+p.key+'</div><div style="font-size:10px;color:#666;margin-top:2px">최근 출현: '+lastRounds+'회</div></div>';
+  });
+  el.innerHTML=html;
+}
+
+// ============ 핫넘버 ============
+function showHotNumbers(){
+  let freq=getFrequency();
+  freq.sort((a,b)=>b.count-a.count);
+  let max=freq[0].count, min=freq[freq.length-1].count;
+  let third=(max-min)/3;
+  let html='<div class="hot-grid">';
+  for(let i=1;i<=45;i++){
+    let f=freq.find(x=>x.num===i);
+    let cls=f.count>=(min+third*2)?'hot':f.count>=(min+third)?'warm':'cool';
+    html+='<div class="hot-num '+cls+'">'+i+'<br><small>'+f.count+'</small></div>';
+  }
+  html+='</div><div style="display:flex;justify-content:center;gap:12px;margin-top:8px;font-size:10px"><span style="color:#fca5a5">● 상위</span><span style="color:#fcd34d">● 중위</span><span style="color:#93c5fd">● 하위</span></div>';
+  document.getElementById('hotNumbers').innerHTML=html;
+}
+
+// ============ 최근 20회 ============
+function showRecentData(){
+  let el=document.getElementById('recentData');
+  if(allData.length===0){el.innerHTML='데이터 없음';return;}
+  let recent=allData.slice(-20).reverse();
+  let html='<table class="recent-table"><tr><th>회차</th><th>당첨번호</th><th>보너스</th></tr>';
+  recent.forEach(d=>{
+    let nums=d.numbers.slice().sort((a,b)=>a-b);
+    html+='<tr><td>'+d.round+'</td><td>'+nums.map(n=>ballHTML(n)).join('')+'</td><td>'+(d.bonus?ballHTML(d.bonus,'bonus'):'-')+'</td></tr>';
+  });
+  html+='</table>';
+  el.innerHTML=html;
+}
+
+// ============ 접기/펼치기 ============
+function toggleSection(id, titleEl){
+  let el=document.getElementById(id);
+  el.classList.toggle('open');
+  if(titleEl) titleEl.classList.toggle('open');
+}
+
+// ============ 토스트 ============
+function showToast(msg){
+  let t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.remove('show');
+  void t.offsetWidth;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ============ 전체 새로고침 ============
+function refreshAll(){
+  showLastDraws();
+  showScoreboard();
+  showAITopCard();
+  showPatternSelect();
+  showMyNumbers();
+  showPatternAnalysis();
+  showHotNumbers();
+  showRecentData();
+}
+
+// ============ 시작 ============
+initData();
+analyzeAllWinningPatterns();
+refreshAll();
+loadFirebase();
+loadKakaoSDK();
+</script>
+</body>
+</html>
