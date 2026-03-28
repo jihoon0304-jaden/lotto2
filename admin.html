@@ -274,8 +274,15 @@ function initAdmin(){
 
 function initData(){
   allData = [];
-  if(typeof LOTTO_DATA !== 'undefined'){
-    allData = LOTTO_DATA.slice();
+  if(typeof LOTTO_DATA !== 'undefined' && Array.isArray(LOTTO_DATA)){
+    for(var i=0; i<LOTTO_DATA.length; i++){
+      var row = LOTTO_DATA[i];
+      allData.push({
+        round: row[0],
+        numbers: [row[1], row[2], row[3], row[4], row[5], row[6]],
+        bonus: row[7]
+      });
+    }
   }
   let extra = JSON.parse(localStorage.getItem('extraDraws')||'[]');
   extra.forEach(e=>{
