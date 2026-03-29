@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jihoon0304-jaden.github.io/lotto2/sitemap.xml
