@@ -146,6 +146,24 @@ body{font-family:-apple-system,'Malgun Gothic',sans-serif;background:#0a0a1a;col
           <button class="btn-signup-submit" onclick="emailSignup()">회원가입</button>
         </div>
       </div>
+      <div id="agreeSection" style="margin-top:12px;text-align:left;font-size:11px;color:#888">
+        <label style="display:flex;align-items:start;gap:6px;margin-bottom:6px;cursor:pointer">
+          <input type="checkbox" id="agreeAll" onchange="toggleAgreeAll()" style="margin-top:2px">
+          <span style="color:#fff;font-weight:700">전체 동의</span>
+        </label>
+        <label style="display:flex;align-items:start;gap:6px;margin-bottom:4px;cursor:pointer">
+          <input type="checkbox" id="agreeTerms" onchange="checkAgree()" style="margin-top:2px">
+          <span>[필수] <a href="terms.html" target="_blank" style="color:#667eea">이용약관</a> 동의</span>
+        </label>
+        <label style="display:flex;align-items:start;gap:6px;margin-bottom:4px;cursor:pointer">
+          <input type="checkbox" id="agreePrivacy" onchange="checkAgree()" style="margin-top:2px">
+          <span>[필수] <a href="privacy.html" target="_blank" style="color:#667eea">개인정보 처리방침</a> 동의</span>
+        </label>
+        <label style="display:flex;align-items:start;gap:6px;margin-bottom:4px;cursor:pointer">
+          <input type="checkbox" id="agreeData" onchange="checkAgree()" style="margin-top:2px">
+          <span>[선택] AI 분석용 데이터 활용 동의</span>
+        </label>
+      </div>
       <p id="loginMsg" style="color:#ef4444;font-size:12px;margin-top:8px"></p>
     </div>
   </div>
