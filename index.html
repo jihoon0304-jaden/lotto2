@@ -327,8 +327,30 @@ function loadKakaoSDK(){
 function openLoginModal(){ document.getElementById('loginModal').classList.add('show'); }
 function closeLoginModal(){ document.getElementById('loginModal').classList.remove('show'); document.getElementById('loginMsg').textContent=''; }
 function toggleEmailForm(){ document.getElementById('emailForm').classList.toggle('show'); }
+function toggleAgreeAll(){
+  var checked=document.getElementById('agreeAll').checked;
+  document.getElementById('agreeTerms').checked=checked;
+  document.getElementById('agreePrivacy').checked=checked;
+  document.getElementById('agreeData').checked=checked;
+}
+function checkAgree(){
+  var t=document.getElementById('agreeTerms').checked;
+  var p=document.getElementById('agreePrivacy').checked;
+  var d=document.getElementById('agreeData').checked;
+  document.getElementById('agreeAll').checked=(t&&p&&d);
+}
+function isAgreed(){
+  var t=document.getElementById('agreeTerms').checked;
+  var p=document.getElementById('agreePrivacy').checked;
+  if(!t||!p){
+    document.getElementById('loginMsg').textContent='이용약관과 개인정보 처리방침에 동의해주세요';
+    return false;
+  }
+  return true;
+}
 
 function kakaoLogin(){
+  if(!isAgreed()) return;
   if(!kakaoLoaded){ document.getElementById('loginMsg').textContent='카카오 로딩중... 잠시 후 다시 시도해주세요'; return; }
   Kakao.Auth.login({
     success: function(authObj){
@@ -353,6 +375,7 @@ function kakaoLogin(){
 }
 
 function googleLogin(){
+  if(!isAgreed()) return;
   if(!firebaseLoaded){ document.getElementById('loginMsg').textContent='서버 연결중... 잠시 후 다시 시도해주세요'; return; }
   window.fb.signInWithPopup(window.fb.auth, window.fb.googleProvider).then(function(result){
     var user = result.user;
@@ -366,6 +389,7 @@ function googleLogin(){
 }
 
 function emailLogin(){
+  if(!isAgreed()) return;
   if(!firebaseLoaded){ document.getElementById('loginMsg').textContent='서버 연결중... 잠시 후 다시 시도해주세요'; return; }
   var email = document.getElementById('emailInput').value;
   var pw = document.getElementById('pwInput').value;
@@ -376,6 +400,7 @@ function emailLogin(){
 }
 
 function emailSignup(){
+  if(!isAgreed()) return;
   if(!firebaseLoaded){ document.getElementById('loginMsg').textContent='서버 연결중... 잠시 후 다시 시도해주세요'; return; }
   var email = document.getElementById('emailInput').value;
   var pw = document.getElementById('pwInput').value;
